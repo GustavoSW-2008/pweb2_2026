@@ -1,69 +1,66 @@
 <?php
-
 namespace App\Http\Controllers;
-
+use App\Models\Sofa;
+use App\Models\Fornecedor;
 use Illuminate\Http\Request;
 
-class SofaController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     */
+class SofaController extends Controller {
     public function index(Request $request) {
-    $busca = $request->input('busca');
-    
-    $sofas = \App\Models\Sofa::when($busca, function($query, $busca) {
-        $query->where('modelo', 'like', "%{$busca}%");
+    $buscar = $request->buscar;
+    $sofas = Sofa::with('fornecedor')->when($buscar, function($query) use ($buscar) {
+        $query->where('modelo', 'like', "%{$buscar}%")
+              ->orWhere('cor', 'like', "%{$buscar}%")
+              ->orWhereHas('fornecedor', function($q) use ($buscar) {
+                  $q->where('nome', 'like', "%{$buscar}%");
+              });
     })->get();
-
-    return view('sofa.list', compact('sofas', 'busca'));
+    
+    return view('sofas.list', compact('sofas', 'buscar'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function create() {
+        $fornecedores = Fornecedor::all();
+        return view('sofas.form', compact('fornecedores'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) {
+        $request->validate([
+    'modelo' => 'required',
+    'cor' => 'required',
+    'preco' => 'required|numeric',
+    'fornecedor_id' => 'required|exists:fornecedores,id'
+    ], [
+    'required' => 'O campo :attribute é obrigatório.',
+    'numeric' => 'O campo preco deve ser um número válido.',
+    'exists' => 'O fornecedor selecionado é inválido.'
+    ]);
+        Sofa::create($request->all());
+        return redirect()->route('sofas.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+    public function edit(Sofa $sofa) {
+        $fornecedores = Fornecedor::all();
+        return view('sofas.form', compact('sofa', 'fornecedores'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+    public function update(Request $request, Sofa $sofa) {
+        $request->validate([
+    'modelo' => 'required',
+    'cor' => 'required',
+    'preco' => 'required|numeric',
+    'fornecedor_id' => 'required|exists:fornecedores,id'
+    ], [
+    'required' => 'O campo :attribute é obrigatório.',
+    'numeric' => 'O campo preco deve ser um número válido.',
+    'exists' => 'O fornecedor selecionado é inválido.'
+    ]);
+        Sofa::create($request->all());
+        return redirect()->route('sofas.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+    public function destroy(Sofa $sofa) {
+        $sofa->delete();
+        return redirect()->route('sofas.index');
     }
 }

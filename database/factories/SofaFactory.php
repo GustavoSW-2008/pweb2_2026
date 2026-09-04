@@ -1,25 +1,17 @@
 <?php
-
 namespace Database\Factories;
-
-use App\Models\Sofa;
+use App\Models\Fornecedor;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<Sofa>
- */
-class SofaFactory extends Factory
-{
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+class SofaFactory extends Factory {
     public function definition(): array {
+    $cores = ['Cinza', 'Preto', 'Marrom', 'Bege', 'Azul Marinho', 'Vermelho', 'Verde Musgo'];
+    
     return [
-        'modelo' => 'Sofá ' . $this->faker->word(),
-        'cor' => $this->faker->colorName(),
-        'preco' => $this->faker->randomFloat(2, 800, 5000),
+        'modelo' => fake()->word() . ' Premium',
+        'cor' => fake()->randomElement($cores),
+        'preco' => fake()->randomFloat(2, 500, 5000),
+        'fornecedor_id' => \App\Models\Fornecedor::factory(),
     ];
-    }
+}
 }

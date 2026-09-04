@@ -1,17 +1,23 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <title>Loja de Sofás</title>
-    <!-- Seus links de CSS / Tailwind aqui -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Seu menu superior ou lateral -->
-    @include('sidebar') 
-
-    <main class="p-4">
-        <!-- Esta diretiva é obrigatória para injetar o código do list.blade.php aqui -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="/">Loja de Sofás</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="{{ route('clientes.index') }}">Clientes</a>
+                <a class="nav-link" href="{{ route('fornecedores.index') }}">Fornecedores</a>
+                <a class="nav-link" href="{{ route('sofas.index') }}">Sofás</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
         @yield('content')
-    </main>
+    </div>
 </body>
 </html>

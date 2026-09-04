@@ -2,63 +2,72 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Fornecedor;
 use Illuminate\Http\Request;
 
 class FornecedorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function index(Request $request) {
+    $buscar = $request->buscar;
+    $fornecedores = Fornecedor::when($buscar, function ($query) use ($buscar) {
+        $query->where('nome', 'like', "%{$buscar}%")
+              ->orWhere('cnpj', 'like', "%{$buscar}%")
+              ->orWhere('email', 'like', "%{$buscar}%");
+    })->get();
+
+    return view('fornecedores.list', compact('fornecedores', 'buscar'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('fornecedores.form');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+        'nome' => 'required|max:255',
+        'cnpj' => 'required|unique:fornecedores,cnpj,' . ($fornecedor->id ?? ''),
+        'email' => 'required|email|max:255',
+        ], [
+        'required' => 'O campo :attribute é obrigatório.',
+        'unique' => 'Este :attribute já está cadastrado.',
+        'email' => 'Insira um endereço de e-mail válido.Ex: exemplo@dominio.com',
+        'max' => 'O campo :attribute é muito longo.'
+        ]);
+
+        Fornecedor::create($request->all());
+
+        return redirect()->route('fornecedores.index')->with('success', 'Fornecedor salvo com sucesso!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Fornecedor $fornecedor)
     {
-        //
+        return view('fornecedores.form', compact('fornecedor'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Fornecedor $fornecedor)
     {
-        //
+        $request->validate([
+        'nome' => 'required|max:255',
+        'cnpj' => 'required|unique:fornecedores,cnpj,' . ($fornecedor->id ?? ''),
+        'email' => 'required|email|max:255',
+        ], [
+        'required' => 'O campo :attribute é obrigatório.',
+        'unique' => 'Este :attribute já está cadastrado.',
+        'email' => 'Insira um endereço de e-mail válido.Ex: exemplo@dominio.com',
+        'max' => 'O campo :attribute é muito longo.'
+        ]);
+
+        $fornecedor->update($request->all());
+
+        return redirect()->route('fornecedores.index')->with('success', 'Fornecedor atualizado com sucesso!');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Fornecedor $fornecedor)
     {
-        //
-    }
+        $fornecedor->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('fornecedores.index')->with('success', 'Fornecedor removido com sucesso!');
     }
 }
