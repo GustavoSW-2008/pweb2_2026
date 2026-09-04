@@ -1,18 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AlunoController;
+use App\Http\Controllers\SofaController;
+use App\Http\Controllers\FornecedorController;
+use App\Http\Controllers\FichaTecnicaController;
 
 Route::get('/', function () {
     return view('main');
 });
 
-Route::get('/aluno', [AlunoController::class, 'index']);
-Route::get('/aluno/create', [AlunoController::class, 'create']);
-Route::post(
-    '/aluno/store',
-    [AlunoController::class, 'store']
-)->name('aluno.store');
+Route::resource('sofas', SofaController::class);
+Route::resource('fornecedors', FornecedorController::class);
+Route::resource('fichas', FichaTecnicaController::class);
 
 Route::get('/aluno/edit/{id}',
     [AlunoController::class, 'edit'])->name('aluno.edit');

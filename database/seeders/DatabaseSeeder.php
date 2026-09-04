@@ -13,17 +13,8 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-    public function run(): void
-    {
-        // User::factory(10)->create();
-        $this->call([
-            CategoriaAlunoSeeder::class,
-            AlunoSeeder::class,
-        ]);
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+    public function run(): void {
+    \App\Models\Fornecedor::factory(10)->create();
+    \App\Models\FichaTecnica::factory(10)->create(); // O FichaTecnicaFactory já cria o Sofá automaticamente por causa da relação
     }
 }
