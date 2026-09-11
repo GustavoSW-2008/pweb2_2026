@@ -13,7 +13,7 @@
 @endif
 
 <form action="{{ route('clientes.index') }}" method="GET" class="mb-3 d-flex">
-    <input type="text" name="buscar" class="form-control me-2" placeholder="Buscar por nome, CPF ou telefone..." value="{{ $buscar ?? '' }}">
+    <input type="text" name="buscar" class="form-control me-2" placeholder="Buscar por nome, CPF, telefone ou endereço..." value="{{ $buscar ?? '' }}">
     <button type="submit" class="btn btn-primary">Buscar</button>
 </form>
 
@@ -23,6 +23,8 @@
             <th>Nome</th>
             <th>CPF</th>
             <th>Telefone</th>
+            <th>Idade</th>
+            <th>Endereço</th>
             <th>Ações</th>
         </tr>
     </thead>
@@ -32,6 +34,8 @@
             <td>{{ $cliente->nome }}</td>
             <td>{{ $cliente->cpf }}</td>
             <td>{{ $cliente->telefone }}</td>
+            <td>{{ $cliente->idade ?? '-' }}</td>
+            <td>{{ $cliente->endereco ?? '-' }}</td>
             <td>
                 <a href="{{ route('clientes.edit', $cliente->id) }}" class="btn btn-sm btn-warning">Editar</a>
                 <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Deseja realmente excluir este cliente?')">
@@ -43,7 +47,7 @@
         </tr>
         @empty
         <tr>
-            <td colspan="4" class="text-center">Nenhum cliente encontrado.</td>
+            <td colspan="6" class="text-center">Nenhum cliente encontrado.</td>
         </tr>
         @endforelse
     </tbody>

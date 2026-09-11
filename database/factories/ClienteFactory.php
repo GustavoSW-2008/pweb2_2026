@@ -8,6 +8,8 @@ class ClienteFactory extends Factory {
             'nome' => fake()->name(),
             'cpf' => fake()->numerify('###.###.###-##'),
             'telefone' => fake()->phoneNumber(),
+            'idade' => fake()->numberBetween(18, 70),
+            'endereco' => fake()->address(),
         ];
     }
 }

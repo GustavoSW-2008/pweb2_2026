@@ -34,6 +34,16 @@
         <input type="text" name="telefone" class="form-control" value="{{ old('telefone', $cliente->telefone ?? '') }}">
     </div>
 
+    <div class="mb-3">
+        <label class="form-label">Idade</label>
+        <input type="number" name="idade" class="form-control" value="{{ old('idade', $cliente->idade ?? '') }}">
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Endereço</label>
+        <input type="text" name="endereco" class="form-control" value="{{ old('endereco', $cliente->endereco ?? '') }}">
+    </div>
+
     <button type="submit" class="btn btn-success">Salvar</button>
     <a href="{{ route('clientes.index') }}" class="btn btn-secondary">Cancelar</a>
 </form>

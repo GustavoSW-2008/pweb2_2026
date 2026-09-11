@@ -9,7 +9,8 @@ class ClienteController extends Controller {
     $clientes = Cliente::when($buscar, function($query) use ($buscar) {
         $query->where('nome', 'like', "%{$buscar}%")
               ->orWhere('cpf', 'like', "%{$buscar}%")
-              ->orWhere('telefone', 'like', "%{$buscar}%");
+              ->orWhere('telefone', 'like', "%{$buscar}%")
+              ->orWhere('endereco', 'like', "%{$buscar}%");
     })->get();
     
     return view('clientes.list', compact('clientes', 'buscar'));
@@ -23,11 +24,15 @@ class ClienteController extends Controller {
         $request->validate([
         'nome' => 'required|max:255',
         'cpf' => 'required|unique:clientes,cpf,' . ($cliente->id ?? ''),
-        'telefone' => 'required'
+        'telefone' => 'required',
+        'idade' => 'nullable|integer|min:0|max:150',
+        'endereco' => 'nullable|max:255'
         ], [
         'required' => 'O campo :attribute é obrigatório.',
         'unique' => 'Este :attribute já está cadastrado no sistema.',
-        'max' => 'O campo :attribute não pode ter mais que 255 caracteres.'
+        'max' => 'O campo :attribute não pode ter mais que 255 caracteres.',
+        'integer' => 'O campo :attribute deve ser um número inteiro.',
+        'min' => 'O campo :attribute não pode ser negativo.'
         ]);
         Cliente::create($request->all());
         return redirect()->route('clientes.index')->with('success', 'Cliente salvo com sucesso!');
@@ -41,11 +46,15 @@ class ClienteController extends Controller {
         $request->validate([
             'nome' => 'required|max:255',
             'cpf' => 'required|unique:clientes,cpf,'.$cliente->id,
-            'telefone' => 'required'
+            'telefone' => 'required',
+            'idade' => 'nullable|integer|min:0|max:150',
+            'endereco' => 'nullable|max:255'
         ], [
             'required' => 'O campo :attribute é obrigatório.',
             'unique' => 'Este :attribute já está cadastrado no sistema.',
-            'max' => 'O campo :attribute não pode ter mais que 255 caracteres.'
+            'max' => 'O campo :attribute não pode ter mais que 255 caracteres.',
+            'integer' => 'O campo :attribute deve ser um número inteiro.',
+            'min' => 'O campo :attribute não pode ser negativo.'
         ]);
         $cliente->update($request->all());
         return redirect()->route('clientes.index')->with('success', 'Atualizado com sucesso!');
