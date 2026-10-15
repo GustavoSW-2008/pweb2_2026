@@ -8,11 +8,12 @@ return new class extends Migration {
         Schema::table('clientes', function (Blueprint $table) {
             $table->integer('idade')->nullable();
             $table->string('endereco')->nullable();
+            $table->string('imagem')->nullable();
         });
     }
     public function down(): void {
         Schema::table('clientes', function (Blueprint $table) {
-            $table->dropColumn(['idade', 'endereco']);
+            $table->dropColumn(['idade', 'endereco', 'imagem']);
         });
     }
 };

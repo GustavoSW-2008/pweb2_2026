@@ -10,6 +10,9 @@ return new class extends Migration {
             $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade');
             $table->foreignId('sofa_id')->constrained('sofas')->onDelete('cascade');
             $table->date('data_venda');
+            $table->integer('quantidade')->default(1);
+            $table->decimal('valor_total', 10, 2)->default(0);
+            $table->string('forma_pagamento')->default('PIX');
             $table->timestamps();
         });
     }
