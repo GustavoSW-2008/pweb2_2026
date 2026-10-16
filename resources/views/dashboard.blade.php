@@ -120,7 +120,11 @@
         <div class="card shadow-sm h-100">
             <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
                 <h6 class="fw-bold mb-0 text-dark">
+<<<<<<< HEAD
                     <i class="bi bi-pie-chart-fill text-warning me-2"></i>  Sofás por Fornecedor
+=======
+                    <i class="bi bi-pie-chart-fill text-warning me-2"></i> Sofás por Fornecedor
+>>>>>>> 9628c1dd57e776de2ea6bb8507240778c996e2cf
                 </h6>
                 <a href="{{ route('graficos.sofas') }}" class="btn btn-sm btn-outline-secondary">Tela cheia</a>
             </div>
@@ -134,7 +138,11 @@
         <div class="card shadow-sm h-100">
             <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
                 <h6 class="fw-bold mb-0 text-dark">
+<<<<<<< HEAD
                     <i class="bi bi-bar-chart-fill text-primary me-2"></i>  Faturamento por Sofá
+=======
+                    <i class="bi bi-bar-chart-fill text-primary me-2"></i> Faturamento por Sofá
+>>>>>>> 9628c1dd57e776de2ea6bb8507240778c996e2cf
                 </h6>
                 <a href="{{ route('graficos.vendas') }}" class="btn btn-sm btn-outline-secondary">Tela cheia</a>
             </div>
