@@ -147,12 +147,12 @@
                         <ul class="dropdown-menu">
                             <li>
                                 <a class="dropdown-item" href="{{ route('graficos.sofas') }}">
-                                    <i class="bi bi-pie-chart-fill text-warning me-2"></i> Sofás por Fornecedor (Pizza)
+                                    <i class="bi bi-pie-chart-fill text-warning me-2"></i> Sofás por Fornecedor
                                 </a>
                             </li>
                             <li>
                                 <a class="dropdown-item" href="{{ route('graficos.vendas') }}">
-                                    <i class="bi bi-bar-chart-fill text-primary me-2"></i> Faturamento por Sofá (Barras)
+                                    <i class="bi bi-bar-chart-fill text-primary me-2"></i> Faturamento por Sofá
                                 </a>
                             </li>
                         </ul>
@@ -230,7 +230,7 @@
     <!-- Rodapé -->
     <footer>
         <div class="container text-center">
-            <span>&copy; {{ date('Y') }} Pausa Sofás • Trabalho Avaliativo 02 (Laravel + Bootstrap)</span>
+            <span>&copy; {{ date('Y') }} Pausa Sofás</span>
         </div>
     </footer>
 
