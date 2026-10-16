@@ -5,7 +5,7 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-        <h2 class="fw-bold mb-0 text-dark"><i class="bi bi-card-checklist me-2"></i> Fichas Técnicas (1:1)</h2>
+        <h2 class="fw-bold mb-0 text-dark"><i class="bi bi-card-checklist me-2"></i> Fichas Técnicas </h2>
         <small class="text-muted">Especificações técnicas dos sofás (Tecidos, Espumas, Pesos e Dimensões)</small>
     </div>
     <a href="{{ route('fichas.create') }}" class="btn btn-success shadow-sm">
@@ -43,7 +43,7 @@
             <thead class="table-dark">
                 <tr>
                     <th style="width: 50px;">#</th>
-                    <th>Sofá Associado (1:1)</th>
+                    <th>Sofá Associado </th>
                     <th>Tecido</th>
                     <th>Peso (kg)</th>
                     <th>Dimensões (L x P x A)</th>

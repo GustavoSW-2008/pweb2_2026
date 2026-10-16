@@ -47,7 +47,7 @@ class FichaTecnicaController extends Controller
             'densidade_espuma' => 'nullable|max:100',
         ], [
             'sofa_id.required' => 'Selecione um sofá para a ficha técnica.',
-            'sofa_id.unique' => 'Este sofá já possui uma ficha técnica cadastrada (relação 1:1).',
+            'sofa_id.unique' => 'Este sofá já possui uma ficha técnica cadastrada .',
             'sofa_id.exists' => 'O sofá selecionado é inválido.',
             'tecido.required' => 'O tipo de tecido é obrigatório.',
             'peso.required' => 'O peso do produto é obrigatório.',

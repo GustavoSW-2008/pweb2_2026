@@ -88,7 +88,7 @@
             <div class="card-body p-3">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <span class="text-white-50 small text-uppercase">Fichas (1:1)</span>
+                        <span class="text-white-50 small text-uppercase">Fichas </span>
                         <h3 class="fw-bold mb-0 mt-1">{{ $totalFichas }}</h3>
                     </div>
                     <i class="bi bi-card-checklist fs-2 text-white-50"></i>
@@ -120,7 +120,7 @@
         <div class="card shadow-sm h-100">
             <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
                 <h6 class="fw-bold mb-0 text-dark">
-                    <i class="bi bi-pie-chart-fill text-warning me-2"></i> Gráfico 1: Sofás por Fornecedor (Pizza)
+                    <i class="bi bi-pie-chart-fill text-warning me-2"></i>  Sofás por Fornecedor
                 </h6>
                 <a href="{{ route('graficos.sofas') }}" class="btn btn-sm btn-outline-secondary">Tela cheia</a>
             </div>
@@ -134,7 +134,7 @@
         <div class="card shadow-sm h-100">
             <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
                 <h6 class="fw-bold mb-0 text-dark">
-                    <i class="bi bi-bar-chart-fill text-primary me-2"></i> Gráfico 2: Faturamento por Sofá (Barras)
+                    <i class="bi bi-bar-chart-fill text-primary me-2"></i>  Faturamento por Sofá
                 </h6>
                 <a href="{{ route('graficos.vendas') }}" class="btn btn-sm btn-outline-secondary">Tela cheia</a>
             </div>

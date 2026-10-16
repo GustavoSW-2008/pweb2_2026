@@ -82,7 +82,7 @@
                         <div class="col-md-4">
                             <label for="data_venda" class="form-label fw-semibold">Data da Venda <span class="text-danger">*</span></label>
                             <input type="date" name="data_venda" id="data_venda" class="form-control @error('data_venda') is-invalid @enderror"
-                                   value="{{ old('data_venda', isset($venda) ? \Carbon\Carbon::parse($venda->data_venda)->format('Y-m-d') : date('Y-m-d')) }}" required>
+                                   value="{{ old('data_venda', isset($venda) ? \Carbon\Carbon::parse($venda->data_venda)->format('d-m-Y') : date('d-m-Y')) }}" required>
                             @error('data_venda')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
