@@ -10,16 +10,13 @@ class ClienteController extends Controller
 {
     public function index(Request $request)
     {
-        $buscar = $request->buscar ?? $request->valor;
+        $search = $request->search;
 
-        $clientes = Cliente::when($buscar, function ($query) use ($buscar) {
-            $query->where('nome', 'like', "%{$buscar}%")
-                ->orWhere('cpf', 'like', "%{$buscar}%")
-                ->orWhere('telefone', 'like', "%{$buscar}%")
-                ->orWhere('endereco', 'like', "%{$buscar}%");
+        $clientes = Cliente::when($search, function ($query) use ($search) {
+            $query->where('nome', 'like', "%{$search}%");
         })->orderBy('nome')->get();
 
-        return view('clientes.list', compact('clientes', 'buscar'));
+        return view('clientes.list', compact('clientes', 'search'));
     }
 
     public function create()
@@ -27,47 +24,27 @@ class ClienteController extends Controller
         return view('clientes.form');
     }
 
-    public function validateForm(Request $request, $id = null)
-    {
-        $uniqueCpf = 'unique:clientes,cpf' . ($id ? ",{$id}" : '');
-
-        $request->validate([
-            'nome' => 'required|max:255',
-            'cpf' => "required|{$uniqueCpf}",
-            'telefone' => 'required|max:30',
-            'idade' => 'nullable|integer|min:0|max:150',
-            'endereco' => 'nullable|max:255',
-            'imagem' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
-        ], [
-            'nome.required' => 'O campo nome é obrigatório.',
-            'nome.max' => 'O nome não pode exceder 255 caracteres.',
-            'cpf.required' => 'O campo CPF é obrigatório.',
-            'cpf.unique' => 'Este CPF já está cadastrado no sistema.',
-            'telefone.required' => 'O campo telefone é obrigatório.',
-            'idade.integer' => 'A idade deve ser um número inteiro.',
-            'idade.min' => 'A idade não pode ser negativa.',
-            'idade.max' => 'Idade inválida.',
-            'imagem.image' => 'O arquivo enviado deve ser uma imagem válida.',
-            'imagem.mimes' => 'A imagem deve estar no formato PNG, JPG, JPEG ou WEBP.',
-            'imagem.max' => 'A imagem não pode ultrapassar 2MB.',
-        ]);
-    }
-
     public function store(Request $request)
     {
-        $this->validateForm($request);
+        $request->validate([
+            'nome'     => 'required|max:255',
+            'cpf'      => 'required|unique:clientes,cpf',
+            'telefone' => 'required|max:30',
+            'idade'    => 'nullable|integer|min:0|max:150',
+            'endereco' => 'nullable|max:255',
+            'imagem'   => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
+        ]);
 
-        $data = $request->all();
-        $imagem = $request->file('imagem');
+        $dados = $request->all();
 
-        if ($imagem) {
-            $nome_imagem = date('YmdiHs') . '_' . uniqid() . '.' . $imagem->getClientOriginalExtension();
-            $diretorio = 'imagem/cliente/';
-            $imagem->storeAs($diretorio, $nome_imagem, 'public');
-            $data['imagem'] = $diretorio . $nome_imagem;
+        if ($request->hasFile('imagem')) {
+            $imagem = $request->file('imagem');
+            $nomeImagem = time() . '_' . $imagem->getClientOriginalName();
+            $imagem->storeAs('imagens/clientes', $nomeImagem, 'public');
+            $dados['imagem'] = 'imagens/clientes/' . $nomeImagem;
         }
 
-        Cliente::create($data);
+        Cliente::create($dados);
 
         return redirect()->route('clientes.index')->with('success', 'Cliente cadastrado com sucesso!');
     }
@@ -79,36 +56,40 @@ class ClienteController extends Controller
 
     public function update(Request $request, Cliente $cliente)
     {
-        $this->validateForm($request, $cliente->id);
+        $request->validate([
+            'nome'     => 'required|max:255',
+            'cpf'      => 'required|unique:clientes,cpf,' . $cliente->id,
+            'telefone' => 'required|max:30',
+            'idade'    => 'nullable|integer|min:0|max:150',
+            'endereco' => 'nullable|max:255',
+            'imagem'   => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
+        ]);
 
-        $data = $request->all();
-        $imagem = $request->file('imagem');
+        $dados = $request->all();
 
-        if ($imagem) {
-            // Remove a imagem antiga se existir
+        if ($request->hasFile('imagem')) {
             if ($cliente->imagem && Storage::disk('public')->exists($cliente->imagem)) {
                 Storage::disk('public')->delete($cliente->imagem);
             }
 
-            $nome_imagem = date('YmdiHs') . '_' . uniqid() . '.' . $imagem->getClientOriginalExtension();
-            $diretorio = 'imagem/cliente/';
-            $imagem->storeAs($diretorio, $nome_imagem, 'public');
-            $data['imagem'] = $diretorio . $nome_imagem;
+            $imagem = $request->file('imagem');
+            $nomeImagem = time() . '_' . $imagem->getClientOriginalName();
+            $imagem->storeAs('imagens/clientes', $nomeImagem, 'public');
+            $dados['imagem'] = 'imagens/clientes/' . $nomeImagem;
         }
 
-        $cliente->update($data);
+        $cliente->update($dados);
 
         return redirect()->route('clientes.index')->with('success', 'Cliente atualizado com sucesso!');
     }
 
     public function destroy(Cliente $cliente)
     {
-        // Se o cliente possui vendas vinculadas
         if ($cliente->vendas()->count() > 0) {
-            return redirect()->route('clientes.index')->with('error', "Não é possível remover o(a) cliente {$cliente->nome}, pois existem vendas associadas a ele(a)!");
+            return redirect()->route('clientes.index')
+                ->with('error', 'Não é possível remover o cliente pois há vendas vinculadas a ele!');
         }
 
-        // Exclui o arquivo de imagem do storage
         if ($cliente->imagem && Storage::disk('public')->exists($cliente->imagem)) {
             Storage::disk('public')->delete($cliente->imagem);
         }
@@ -116,10 +97,5 @@ class ClienteController extends Controller
         $cliente->delete();
 
         return redirect()->route('clientes.index')->with('success', 'Cliente removido com sucesso!');
-    }
-
-    public function search(Request $request)
-    {
-        return $this->index($request);
     }
 }

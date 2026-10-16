@@ -9,15 +9,13 @@ class FornecedorController extends Controller
 {
     public function index(Request $request)
     {
-        $buscar = $request->buscar ?? $request->valor;
+        $search = $request->search;
 
-        $fornecedores = Fornecedor::when($buscar, function ($query) use ($buscar) {
-            $query->where('nome', 'like', "%{$buscar}%")
-                ->orWhere('cnpj', 'like', "%{$buscar}%")
-                ->orWhere('email', 'like', "%{$buscar}%");
-        })->withCount('sofas')->orderBy('nome')->get();
+        $fornecedores = Fornecedor::when($search, function ($query) use ($search) {
+            $query->where('nome', 'like', "%{$search}%");
+        })->orderBy('nome')->get();
 
-        return view('fornecedores.list', compact('fornecedores', 'buscar'));
+        return view('fornecedores.list', compact('fornecedores', 'search'));
     }
 
     public function create()
@@ -25,28 +23,13 @@ class FornecedorController extends Controller
         return view('fornecedores.form');
     }
 
-    public function validateForm(Request $request, $id = null)
-    {
-        $uniqueCnpj = 'unique:fornecedores,cnpj' . ($id ? ",{$id}" : '');
-
-        $request->validate([
-            'nome' => 'required|max:255',
-            'cnpj' => "required|{$uniqueCnpj}",
-            'email' => 'required|email|max:255',
-        ], [
-            'nome.required' => 'O campo nome é obrigatório.',
-            'nome.max' => 'O nome não pode exceder 255 caracteres.',
-            'cnpj.required' => 'O campo CNPJ é obrigatório.',
-            'cnpj.unique' => 'Este CNPJ já está cadastrado no sistema.',
-            'email.required' => 'O campo e-mail é obrigatório.',
-            'email.email' => 'Insira um endereço de e-mail válido (ex: contato@empresa.com).',
-            'email.max' => 'O e-mail não pode exceder 255 caracteres.',
-        ]);
-    }
-
     public function store(Request $request)
     {
-        $this->validateForm($request);
+        $request->validate([
+            'nome'  => 'required|max:255',
+            'cnpj'  => 'required|unique:fornecedores,cnpj',
+            'email' => 'required|email|max:255',
+        ]);
 
         Fornecedor::create($request->all());
 
@@ -60,7 +43,11 @@ class FornecedorController extends Controller
 
     public function update(Request $request, Fornecedor $fornecedor)
     {
-        $this->validateForm($request, $fornecedor->id);
+        $request->validate([
+            'nome'  => 'required|max:255',
+            'cnpj'  => 'required|unique:fornecedores,cnpj,' . $fornecedor->id,
+            'email' => 'required|email|max:255',
+        ]);
 
         $fornecedor->update($request->all());
 
@@ -70,19 +57,12 @@ class FornecedorController extends Controller
     public function destroy(Fornecedor $fornecedor)
     {
         if ($fornecedor->sofas()->count() > 0) {
-            return redirect()->route('fornecedores.index')->with(
-                'error',
-                "Não é possível remover o fornecedor {$fornecedor->nome}, pois existem sofás associados a ele!"
-            );
+            return redirect()->route('fornecedores.index')
+                ->with('error', 'Não é possível remover o fornecedor pois há sofás vinculados a ele!');
         }
 
         $fornecedor->delete();
 
         return redirect()->route('fornecedores.index')->with('success', 'Fornecedor removido com sucesso!');
-    }
-
-    public function search(Request $request)
-    {
-        return $this->index($request);
     }
 }

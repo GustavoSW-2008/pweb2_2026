@@ -2,45 +2,38 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>{{ $titulo }}</title>
+    <title>Relatório de Vendas - Pausa Sofás</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             font-size: 12px;
-            color: #333333;
+            color: #333;
             margin: 20px;
         }
-        .header {
-            border-bottom: 2px solid #1a3a5c;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-        .header h1 {
+        h1 {
             color: #1a3a5c;
-            margin: 0;
-            font-size: 20px;
+            font-size: 18px;
+            margin-bottom: 5px;
         }
-        .header .meta {
-            color: #666666;
+        .meta {
+            color: #666;
             font-size: 11px;
-            margin-top: 5px;
+            margin-bottom: 20px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
+            margin-top: 10px;
         }
         th, td {
-            border: 1px solid #dddddd;
-            padding: 8px 10px;
+            border: 1px solid #ddd;
+            padding: 7px 10px;
             text-align: left;
         }
         th {
             background-color: #1a3a5c;
-            color: #ffffff;
-            font-weight: bold;
+            color: #fff;
             font-size: 11px;
-            text-transform: uppercase;
         }
         tr:nth-child(even) {
             background-color: #f9f9f9;
@@ -51,66 +44,61 @@
         .text-center {
             text-align: center;
         }
+        .total {
+            margin-top: 15px;
+            background-color: #f1f5f9;
+            padding: 10px 15px;
+            border-left: 4px solid #198754;
+        }
         .footer {
             margin-top: 30px;
-            border-top: 1px solid #cccccc;
-            padding-top: 10px;
             font-size: 10px;
-            color: #777777;
+            color: #999;
             text-align: center;
-        }
-        .summary-box {
-            margin-top: 20px;
-            background-color: #f1f5f9;
-            padding: 12px 15px;
-            border-left: 4px solid #198754;
-            font-size: 12px;
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>Pausa Sofás • {{ $titulo }}</h1>
-        <div class="meta">
-            <span><strong>Data de Emissão:</strong> {{ $data }}</span> &nbsp;|&nbsp;
-            <span><strong>Total de Vendas:</strong> {{ count($dados) }}</span>
-        </div>
+    <h1>Pausa Sofás — Relatório Geral de Vendas</h1>
+    <div class="meta">
+        Data de emissão: {{ $data }} &nbsp;|&nbsp; Total de vendas: {{ count($vendas) }}
     </div>
 
     <table>
         <thead>
             <tr>
-                <th style="width: 30px;" class="text-center">#</th>
+                <th class="text-center">#</th>
                 <th>Data</th>
                 <th>Cliente</th>
-                <th>Sofá (Modelo)</th>
+                <th>Sofá</th>
                 <th class="text-center">Qtd</th>
-                <th>Forma de Pagto</th>
+                <th>Pagamento</th>
                 <th class="text-right">Valor Total</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($dados as $item)
+            @foreach($vendas as $venda)
             <tr>
-                <td class="text-center">{{ $item->id }}</td>
-                <td>{{ \Carbon\Carbon::parse($item->data_venda)->format('d/m/Y') }}</td>
-                <td>{{ $item->cliente->nome ?? 'Cliente não encontrado' }}</td>
-                <td>{{ $item->sofa->modelo ?? 'Sofá não encontrado' }}</td>
-                <td class="text-center">{{ $item->quantidade }}</td>
-                <td>{{ $item->forma_pagamento }}</td>
-                <td class="text-right"><strong>R$ {{ number_format($item->valor_total, 2, ',', '.') }}</strong></td>
+                <td class="text-center">{{ $venda->id }}</td>
+                <td>{{ date('d/m/Y', strtotime($venda->data_venda)) }}</td>
+                <td>{{ $venda->cliente->nome ?? '-' }}</td>
+                <td>{{ $venda->sofa->modelo ?? '-' }}</td>
+                <td class="text-center">{{ $venda->quantidade }}</td>
+                <td>{{ $venda->forma_pagamento }}</td>
+                <td class="text-right"><strong>R$ {{ number_format($venda->valor_total, 2, ',', '.') }}</strong></td>
             </tr>
             @endforeach
         </tbody>
     </table>
 
-    <div class="summary-box">
-        <strong>Faturamento Geral Consolidado:</strong> R$ {{ number_format($totalGeral, 2, ',', '.') }} em {{ count($dados) }} pedidos registrados.
+    <div class="total">
+        <strong>Faturamento Total:</strong> R$ {{ number_format($totalGeral, 2, ',', '.') }}
+        em {{ count($vendas) }} vendas.
     </div>
 
     <div class="footer">
-        Pausa Sofás - Sistema de Gestão e Controle • Documento gerado automaticamente para fins avaliativos.
+        Pausa Sofás — Sistema de Gestão — Documento gerado automaticamente
     </div>
 
 </body>

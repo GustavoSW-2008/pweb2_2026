@@ -120,7 +120,7 @@
                         </a>
                     </li>
 
-                    <!-- Dropdown Relatórios PDF -->
+                    <!-- Relatórios PDF -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-file-earmark-pdf me-1 text-danger"></i> Relatórios PDF
@@ -134,25 +134,6 @@
                             <li>
                                 <a class="dropdown-item" href="{{ route('vendas.report') }}">
                                     <i class="bi bi-file-pdf text-danger me-2"></i> Relatório de Vendas
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <!-- Dropdown Gráficos -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-pie-chart me-1 text-warning"></i> Gráficos
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a class="dropdown-item" href="{{ route('graficos.sofas') }}">
-                                    <i class="bi bi-pie-chart-fill text-warning me-2"></i> Sofás por Fornecedor
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="{{ route('graficos.vendas') }}">
-                                    <i class="bi bi-bar-chart-fill text-primary me-2"></i> Faturamento por Sofá
                                 </a>
                             </li>
                         </ul>

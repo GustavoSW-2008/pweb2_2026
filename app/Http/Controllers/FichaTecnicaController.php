@@ -10,57 +10,34 @@ class FichaTecnicaController extends Controller
 {
     public function index(Request $request)
     {
-        $buscar = $request->buscar ?? $request->valor;
+        $search = $request->search;
 
         $fichas = FichaTecnica::with('sofa')
-            ->when($buscar, function ($query) use ($buscar) {
-                $query->where('tecido', 'like', "%{$buscar}%")
-                    ->orWhere('dimensoes', 'like', "%{$buscar}%")
-                    ->orWhere('densidade_espuma', 'like', "%{$buscar}%")
-                    ->orWhereHas('sofa', function ($q) use ($buscar) {
-                        $q->where('modelo', 'like', "%{$buscar}%");
-                    });
+            ->when($search, function ($query) use ($search) {
+                $query->where('tecido', 'like', "%{$search}%");
             })
             ->get();
 
-        return view('fichas_tecnicas.list', compact('fichas', 'buscar'));
+        return view('fichas_tecnicas.list', compact('fichas', 'search'));
     }
 
     public function create()
     {
-        // Sofás que ainda não possuem ficha técnica cadastrada (Relacionamento 1:1)
+        // Apenas sofás que ainda não têm ficha técnica (relação 1:1)
         $sofas = Sofa::whereDoesntHave('fichaTecnica')->orderBy('modelo')->get();
-
         return view('fichas_tecnicas.form', compact('sofas'));
-    }
-
-    public function validateForm(Request $request, $id = null)
-    {
-        $uniqueSofa = 'unique:fichas_tecnicas,sofa_id' . ($id ? ",{$id}" : '');
-
-        $request->validate([
-            'sofa_id' => "required|exists:sofas,id|{$uniqueSofa}",
-            'tecido' => 'required|max:100',
-            'peso' => 'required|numeric|min:1',
-            'dimensoes' => 'required|max:100',
-            'garantia_meses' => 'required|integer|min:1|max:120',
-            'densidade_espuma' => 'nullable|max:100',
-        ], [
-            'sofa_id.required' => 'Selecione um sofá para a ficha técnica.',
-            'sofa_id.unique' => 'Este sofá já possui uma ficha técnica cadastrada .',
-            'sofa_id.exists' => 'O sofá selecionado é inválido.',
-            'tecido.required' => 'O tipo de tecido é obrigatório.',
-            'peso.required' => 'O peso do produto é obrigatório.',
-            'peso.numeric' => 'O peso deve ser um valor numérico (em kg).',
-            'dimensoes.required' => 'As dimensões do sofá são obrigatórias.',
-            'garantia_meses.required' => 'O prazo de garantia é obrigatório.',
-            'garantia_meses.integer' => 'A garantia deve ser informada em meses (número inteiro).',
-        ]);
     }
 
     public function store(Request $request)
     {
-        $this->validateForm($request);
+        $request->validate([
+            'sofa_id'          => 'required|exists:sofas,id|unique:fichas_tecnicas,sofa_id',
+            'tecido'           => 'required|max:100',
+            'peso'             => 'required|numeric|min:1',
+            'dimensoes'        => 'required|max:100',
+            'garantia_meses'   => 'required|integer|min:1|max:120',
+            'densidade_espuma' => 'nullable|max:100',
+        ]);
 
         FichaTecnica::create($request->all());
 
@@ -69,7 +46,7 @@ class FichaTecnicaController extends Controller
 
     public function edit(FichaTecnica $ficha)
     {
-        // Ao editar, inclui os sofás livres mais o sofá atual desta ficha
+        // Inclui sofás livres + o sofá atual desta ficha
         $sofas = Sofa::whereDoesntHave('fichaTecnica')
             ->orWhere('id', $ficha->sofa_id)
             ->orderBy('modelo')
@@ -80,7 +57,14 @@ class FichaTecnicaController extends Controller
 
     public function update(Request $request, FichaTecnica $ficha)
     {
-        $this->validateForm($request, $ficha->id);
+        $request->validate([
+            'sofa_id'          => 'required|exists:sofas,id|unique:fichas_tecnicas,sofa_id,' . $ficha->id,
+            'tecido'           => 'required|max:100',
+            'peso'             => 'required|numeric|min:1',
+            'dimensoes'        => 'required|max:100',
+            'garantia_meses'   => 'required|integer|min:1|max:120',
+            'densidade_espuma' => 'nullable|max:100',
+        ]);
 
         $ficha->update($request->all());
 
@@ -90,12 +74,6 @@ class FichaTecnicaController extends Controller
     public function destroy(FichaTecnica $ficha)
     {
         $ficha->delete();
-
         return redirect()->route('fichas.index')->with('success', 'Ficha Técnica removida com sucesso!');
-    }
-
-    public function search(Request $request)
-    {
-        return $this->index($request);
     }
 }

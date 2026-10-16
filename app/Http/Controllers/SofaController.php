@@ -12,20 +12,16 @@ class SofaController extends Controller
 {
     public function index(Request $request)
     {
-        $buscar = $request->buscar ?? $request->valor;
+        $search = $request->search;
 
         $sofas = Sofa::with(['fornecedor', 'fichaTecnica'])
-            ->when($buscar, function ($query) use ($buscar) {
-                $query->where('modelo', 'like', "%{$buscar}%")
-                    ->orWhere('cor', 'like', "%{$buscar}%")
-                    ->orWhereHas('fornecedor', function ($q) use ($buscar) {
-                        $q->where('nome', 'like', "%{$buscar}%");
-                    });
+            ->when($search, function ($query) use ($search) {
+                $query->where('modelo', 'like', "%{$search}%");
             })
             ->orderBy('modelo')
             ->get();
 
-        return view('sofas.list', compact('sofas', 'buscar'));
+        return view('sofas.list', compact('sofas', 'search'));
     }
 
     public function create()
@@ -34,43 +30,26 @@ class SofaController extends Controller
         return view('sofas.form', compact('fornecedores'));
     }
 
-    public function validateForm(Request $request)
-    {
-        $request->validate([
-            'modelo' => 'required|max:255',
-            'cor' => 'required|max:100',
-            'preco' => 'required|numeric|min:0',
-            'fornecedor_id' => 'required|exists:fornecedores,id',
-            'imagem' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
-        ], [
-            'modelo.required' => 'O modelo do sofá é obrigatório.',
-            'cor.required' => 'A cor é obrigatória.',
-            'preco.required' => 'O preço é obrigatório.',
-            'preco.numeric' => 'O preço deve ser um valor numérico válido.',
-            'preco.min' => 'O preço não pode ser negativo.',
-            'fornecedor_id.required' => 'Selecione um fornecedor.',
-            'fornecedor_id.exists' => 'O fornecedor selecionado é inválido.',
-            'imagem.image' => 'O arquivo enviado deve ser uma imagem.',
-            'imagem.mimes' => 'A imagem deve ser PNG, JPG, JPEG ou WEBP.',
-            'imagem.max' => 'A imagem não pode ultrapassar 2MB.',
-        ]);
-    }
-
     public function store(Request $request)
     {
-        $this->validateForm($request);
+        $request->validate([
+            'modelo'       => 'required|max:255',
+            'cor'          => 'required|max:100',
+            'preco'        => 'required|numeric|min:0',
+            'fornecedor_id'=> 'required|exists:fornecedores,id',
+            'imagem'       => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
+        ]);
 
-        $data = $request->all();
-        $imagem = $request->file('imagem');
+        $dados = $request->all();
 
-        if ($imagem) {
-            $nome_imagem = date('YmdiHs') . '_' . uniqid() . '.' . $imagem->getClientOriginalExtension();
-            $diretorio = 'imagem/sofa/';
-            $imagem->storeAs($diretorio, $nome_imagem, 'public');
-            $data['imagem'] = $diretorio . $nome_imagem;
+        if ($request->hasFile('imagem')) {
+            $imagem = $request->file('imagem');
+            $nomeImagem = time() . '_' . $imagem->getClientOriginalName();
+            $imagem->storeAs('imagens/sofas', $nomeImagem, 'public');
+            $dados['imagem'] = 'imagens/sofas/' . $nomeImagem;
         }
 
-        Sofa::create($data);
+        Sofa::create($dados);
 
         return redirect()->route('sofas.index')->with('success', 'Sofá cadastrado com sucesso!');
     }
@@ -83,39 +62,40 @@ class SofaController extends Controller
 
     public function update(Request $request, Sofa $sofa)
     {
-        $this->validateForm($request);
+        $request->validate([
+            'modelo'       => 'required|max:255',
+            'cor'          => 'required|max:100',
+            'preco'        => 'required|numeric|min:0',
+            'fornecedor_id'=> 'required|exists:fornecedores,id',
+            'imagem'       => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
+        ]);
 
-        $data = $request->all();
-        $imagem = $request->file('imagem');
+        $dados = $request->all();
 
-        if ($imagem) {
-            // Remove a imagem antiga se existir
+        if ($request->hasFile('imagem')) {
+            // Remove imagem antiga se existir
             if ($sofa->imagem && Storage::disk('public')->exists($sofa->imagem)) {
                 Storage::disk('public')->delete($sofa->imagem);
             }
 
-            $nome_imagem = date('YmdiHs') . '_' . uniqid() . '.' . $imagem->getClientOriginalExtension();
-            $diretorio = 'imagem/sofa/';
-            $imagem->storeAs($diretorio, $nome_imagem, 'public');
-            $data['imagem'] = $diretorio . $nome_imagem;
+            $imagem = $request->file('imagem');
+            $nomeImagem = time() . '_' . $imagem->getClientOriginalName();
+            $imagem->storeAs('imagens/sofas', $nomeImagem, 'public');
+            $dados['imagem'] = 'imagens/sofas/' . $nomeImagem;
         }
 
-        $sofa->update($data);
+        $sofa->update($dados);
 
         return redirect()->route('sofas.index')->with('success', 'Sofá atualizado com sucesso!');
     }
 
     public function destroy(Sofa $sofa)
     {
-        // Verifica se há vendas vinculadas ao sofá
         if ($sofa->vendas()->count() > 0) {
-            return redirect()->route('sofas.index')->with(
-                'error',
-                "Não é possível remover o sofá {$sofa->modelo}, pois existem vendas registradas para ele!"
-            );
+            return redirect()->route('sofas.index')
+                ->with('error', 'Não é possível remover o sofá pois há vendas vinculadas a ele!');
         }
 
-        // Exclui a imagem física associada
         if ($sofa->imagem && Storage::disk('public')->exists($sofa->imagem)) {
             Storage::disk('public')->delete($sofa->imagem);
         }
@@ -125,22 +105,14 @@ class SofaController extends Controller
         return redirect()->route('sofas.index')->with('success', 'Sofá removido com sucesso!');
     }
 
-    public function search(Request $request)
-    {
-        return $this->index($request);
-    }
-
     public function report()
     {
         $sofas = Sofa::with(['fornecedor', 'fichaTecnica'])->orderBy('modelo')->get();
 
-        $data = [
-            'titulo' => 'Relatório de Sofás Cadastrados',
-            'data' => date('d/m/Y H:i'),
-            'dados' => $sofas,
-        ];
-
-        $pdf = Pdf::loadView('reports.sofas', $data);
+        $pdf = Pdf::loadView('reports.sofas', [
+            'sofas' => $sofas,
+            'data'  => date('d/m/Y H:i'),
+        ]);
 
         return $pdf->download('relatorio_sofas.pdf');
     }
