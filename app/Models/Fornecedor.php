@@ -12,11 +12,11 @@ class Fornecedor extends Model
     protected $table = 'fornecedores';
 
     protected $fillable = [
-        'razao_social',
-        'nome_fantasia',
+        'empresa',
         'cnpj',
         'email_contato',
         'telefone',
+        'avaliacao',
     ];
 
     public function sofas()

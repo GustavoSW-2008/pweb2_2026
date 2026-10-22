@@ -46,19 +46,19 @@ class FichaTecnicaController extends Controller
         return redirect()->route('fichas-tecnicas.index')->with('success', 'Ficha técnica cadastrada com sucesso!');
     }
 
-    public function edit(FichaTecnica $fichaTecnica)
+    public function edit(FichaTecnica $fichas_tecnica)
     {
-        $sofas = Sofa::whereDoesntHave('fichaTecnica', function ($query) use ($fichaTecnica) {
-            $query->where('id', '!=', $fichaTecnica->id);
-        })->orWhere('id', $fichaTecnica->sofa_id)->orderBy('modelo')->get();
+        $sofas = Sofa::whereDoesntHave('fichaTecnica', function ($query) use ($fichas_tecnica) {
+            $query->where('id', '!=', $fichas_tecnica->id);
+        })->orWhere('id', $fichas_tecnica->sofa_id)->orderBy('modelo')->get();
 
-        return view('fichas_tecnicas.form', compact('fichaTecnica', 'sofas'));
+        return view('fichas_tecnicas.form', compact('fichas_tecnica', 'sofas'));
     }
 
-    public function update(Request $request, FichaTecnica $fichaTecnica)
+    public function update(Request $request, FichaTecnica $fichas_tecnica)
     {
         $request->validate([
-            'sofa_id'      => 'required|exists:sofas,id|unique:fichas_tecnicas,sofa_id,' . $fichaTecnica->id,
+            'sofa_id'      => 'required|exists:sofas,id|unique:fichas_tecnicas,sofa_id,' . $fichas_tecnica->id,
             'altura'       => 'required|numeric|min:0',
             'largura'      => 'required|numeric|min:0',
             'profundidade' => 'required|numeric|min:0',
@@ -66,14 +66,14 @@ class FichaTecnicaController extends Controller
             'peso'         => 'required|numeric|min:0',
         ]);
 
-        $fichaTecnica->update($request->all());
+        $fichas_tecnica->update($request->all());
 
         return redirect()->route('fichas-tecnicas.index')->with('success', 'Ficha técnica atualizada com sucesso!');
     }
 
-    public function destroy(FichaTecnica $fichaTecnica)
+    public function destroy(FichaTecnica $fichas_tecnica)
     {
-        $fichaTecnica->delete();
+        $fichas_tecnica->delete();
 
         return redirect()->route('fichas-tecnicas.index')->with('success', 'Ficha técnica removida com sucesso!');
     }

@@ -12,9 +12,8 @@ class FornecedorController extends Controller
         $search = $request->search;
 
         $fornecedores = Fornecedor::when($search, function ($query) use ($search) {
-            $query->where('nome_fantasia', 'like', "%{$search}%")
-                  ->orWhere('razao_social', 'like', "%{$search}%");
-        })->orderBy('nome_fantasia')->get();
+            $query->where('empresa', 'like', "%{$search}%");
+        })->orderBy('empresa')->get();
 
         return view('fornecedores.list', compact('fornecedores', 'search'));
     }
@@ -27,11 +26,11 @@ class FornecedorController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'razao_social'  => 'required|max:255',
-            'nome_fantasia' => 'required|max:255',
+            'empresa'       => 'required|max:255',
             'cnpj'          => 'required|unique:fornecedores,cnpj',
             'email_contato' => 'required|email|max:255',
             'telefone'      => 'required|max:30',
+            'avaliacao'     => 'required|integer|min:1|max:10',
         ]);
 
         Fornecedor::create($request->all());
@@ -47,11 +46,11 @@ class FornecedorController extends Controller
     public function update(Request $request, Fornecedor $fornecedor)
     {
         $request->validate([
-            'razao_social'  => 'required|max:255',
-            'nome_fantasia' => 'required|max:255',
+            'empresa'       => 'required|max:255',
             'cnpj'          => 'required|unique:fornecedores,cnpj,' . $fornecedor->id,
             'email_contato' => 'required|email|max:255',
             'telefone'      => 'required|max:30',
+            'avaliacao'     => 'required|integer|min:1|max:10',
         ]);
 
         $fornecedor->update($request->all());

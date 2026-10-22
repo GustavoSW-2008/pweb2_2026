@@ -26,7 +26,7 @@ class SofaController extends Controller
 
     public function create()
     {
-        $fornecedores = Fornecedor::orderBy('nome_fantasia')->get();
+        $fornecedores = Fornecedor::orderBy('empresa')->get();
         return view('sofas.form', compact('fornecedores'));
     }
 
@@ -54,7 +54,7 @@ class SofaController extends Controller
 
     public function edit(Sofa $sofa)
     {
-        $fornecedores = Fornecedor::orderBy('nome_fantasia')->get();
+        $fornecedores = Fornecedor::orderBy('empresa')->get();
         return view('sofas.form', compact('sofa', 'fornecedores'));
     }
 

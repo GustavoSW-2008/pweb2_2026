@@ -10,11 +10,11 @@ return new class extends Migration
     {
         Schema::create('fornecedores', function (Blueprint $table) {
             $table->id();
-            $table->string('razao_social');
-            $table->string('nome_fantasia');
+            $table->string('empresa');
             $table->string('cnpj')->unique();
             $table->string('email_contato');
             $table->string('telefone');
+            $table->integer('avaliacao');
             $table->timestamps();
         });
     }
