@@ -18,7 +18,6 @@
     </div>
 </div>
 
-{{-- Busca via GET ?search= --}}
 <div class="card mb-4 shadow-sm">
     <div class="card-body">
         <form action="{{ route('sofas.index') }}" method="GET" class="row g-2">
@@ -49,8 +48,8 @@
                     <th style="width: 80px;">Foto</th>
                     <th>Modelo</th>
                     <th>Cor</th>
-                    <th>Categoria (1:N)</th>
-                    <th>Fornecedor (1:N)</th>
+                    <th>Tecido / Ficha</th>
+                    <th>Fornecedor</th>
                     <th>Preço Unitário</th>
                     <th class="text-center">Estoque</th>
                     <th class="text-center" style="width: 160px;">Ações</th>
@@ -72,7 +71,13 @@
                     </td>
                     <td class="fw-semibold">{{ $sofa->modelo }}</td>
                     <td>{{ $sofa->cor }}</td>
-                    <td><span class="badge bg-secondary">{{ $sofa->categoria->nome ?? '-' }}</span></td>
+                    <td>
+                        @if($sofa->fichaTecnica)
+                            <span class="badge bg-secondary">{{ $sofa->fichaTecnica->tecido }}</span>
+                        @else
+                            <span class="badge bg-light text-muted border">Sem ficha</span>
+                        @endif
+                    </td>
                     <td><small class="text-muted">{{ $sofa->fornecedor->nome_fantasia ?? '-' }}</small></td>
                     <td class="text-success fw-bold">R$ {{ number_format($sofa->preco, 2, ',', '.') }}</td>
                     <td class="text-center">

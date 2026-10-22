@@ -67,9 +67,8 @@
                             @enderror
                         </div>
 
-                        <!-- Upload de Foto do Cliente -->
                         <div class="col-12">
-                            <label class="form-label fw-semibold"><i class="bi bi-camera me-1"></i> Foto de Perfil (Upload de Arquivo)</label>
+                            <label class="form-label fw-semibold"><i class="bi bi-camera me-1"></i> Foto de Perfil</label>
                             <div class="d-flex align-items-center gap-3 p-3 bg-light rounded border">
                                 @if(!empty($cliente->imagem))
                                     <div>

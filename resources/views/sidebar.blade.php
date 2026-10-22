@@ -10,19 +10,19 @@
           <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('categorias.index') }}">Categorias</a>
+          <a class="nav-link" href="{{ route('sofas.index') }}">Sofás</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('fornecedores.index') }}">Fornecedores</a>
+          <a class="nav-link" href="{{ route('fichas-tecnicas.index') }}">Fichas Técnicas</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ route('clientes.index') }}">Clientes</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('enderecos.index') }}">Endereços</a>
+          <a class="nav-link" href="{{ route('fornecedores.index') }}">Fornecedores</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ route('sofas.index') }}">Sofás</a>
+          <a class="nav-link" href="{{ route('vendas.index') }}">Vendas</a>
         </li>
       </ul>
     </div>

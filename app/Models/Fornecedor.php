@@ -19,7 +19,6 @@ class Fornecedor extends Model
         'telefone',
     ];
 
-    // Relacionamento 1:N (Um fornecedor tem muitos sofás)
     public function sofas()
     {
         return $this->hasMany(Sofa::class);

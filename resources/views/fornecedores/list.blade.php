@@ -13,7 +13,6 @@
     </a>
 </div>
 
-{{-- Busca via GET ?search= --}}
 <div class="card mb-4 shadow-sm">
     <div class="card-body">
         <form action="{{ route('fornecedores.index') }}" method="GET" class="row g-2">

@@ -32,7 +32,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label for="cor" class="form-label fw-semibold">Cor do Tecido <span class="text-danger">*</span></label>
+                            <label for="cor" class="form-label fw-semibold">Cor <span class="text-danger">*</span></label>
                             <input type="text" name="cor" id="cor" class="form-control @error('cor') is-invalid @enderror"
                                    value="{{ old('cor', $sofa->cor ?? '') }}" placeholder="Ex: Cinza Chumbo" required>
                             @error('cor')
@@ -40,28 +40,13 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="categoria_id" class="form-label fw-semibold">Categoria <span class="text-danger">*</span> (1:N)</label>
-                            <select name="categoria_id" id="categoria_id" class="form-select @error('categoria_id') is-invalid @enderror" required>
-                                <option value="">-- Selecione a Categoria --</option>
-                                @foreach($categorias as $cat)
-                                    <option value="{{ $cat->id }}" {{ old('categoria_id', $sofa->categoria_id ?? '') == $cat->id ? 'selected' : '' }}>
-                                        {{ $cat->nome }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('categoria_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="fornecedor_id" class="form-label fw-semibold">Fornecedor / Fabricante <span class="text-danger">*</span> (1:N)</label>
+                        <div class="col-md-12">
+                            <label for="fornecedor_id" class="form-label fw-semibold">Fornecedor / Fabricante <span class="text-danger">*</span></label>
                             <select name="fornecedor_id" id="fornecedor_id" class="form-select @error('fornecedor_id') is-invalid @enderror" required>
                                 <option value="">-- Selecione o Fornecedor --</option>
                                 @foreach($fornecedores as $forn)
                                     <option value="{{ $forn->id }}" {{ old('fornecedor_id', $sofa->fornecedor_id ?? '') == $forn->id ? 'selected' : '' }}>
-                                        {{ $forn->nome_fantasia }}
+                                        {{ $forn->nome_fantasia }} ({{ $forn->razao_social }})
                                     </option>
                                 @endforeach
                             </select>
@@ -88,9 +73,8 @@
                             @enderror
                         </div>
 
-                        <!-- Upload de Foto do Sofá -->
                         <div class="col-12">
-                            <label class="form-label fw-semibold"><i class="bi bi-image me-1"></i> Foto do Sofá (Upload de Arquivo)</label>
+                            <label class="form-label fw-semibold"><i class="bi bi-image me-1"></i> Foto do Sofá</label>
                             <div class="d-flex align-items-center gap-3 p-3 bg-light rounded border">
                                 @if(!empty($sofa->imagem))
                                     <div>

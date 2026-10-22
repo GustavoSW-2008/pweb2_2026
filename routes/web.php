@@ -2,30 +2,24 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\CategoriaController;
-use App\Http\Controllers\FornecedorController;
-use App\Http\Controllers\ClienteController;
-use App\Http\Controllers\EnderecoController;
 use App\Http\Controllers\SofaController;
+use App\Http\Controllers\FichaTecnicaController;
+use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\FornecedorController;
+use App\Http\Controllers\VendaController;
 
-// Painel de Controle (Dashboard)
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-// 1. Categorias (CRUD + busca ?search=)
-Route::resource('categorias', CategoriaController::class);
+Route::get('/sofas/relatorio', [SofaController::class, 'relatorio'])->name('sofas.report');
+Route::resource('sofas', SofaController::class);
 
-// 2. Fornecedores (CRUD + busca ?search=)
+Route::resource('fichas-tecnicas', FichaTecnicaController::class);
+
+Route::get('/clientes/relatorio', [ClienteController::class, 'relatorio'])->name('clientes.report');
+Route::resource('clientes', ClienteController::class);
+
 Route::resource('fornecedores', FornecedorController::class)->parameters([
     'fornecedores' => 'fornecedor',
 ]);
 
-// 3. Clientes (CRUD + busca ?search= + Relatório PDF + Upload)
-Route::get('/clientes/relatorio', [ClienteController::class, 'relatorio'])->name('clientes.report');
-Route::resource('clientes', ClienteController::class);
-
-// 4. Endereços (CRUD + busca ?search= - Relacionamento 1:1 com Cliente)
-Route::resource('enderecos', EnderecoController::class);
-
-// 5. Sofás (CRUD + busca ?search= + Relatório PDF + Upload - Relacionamento 1:N)
-Route::get('/sofas/relatorio', [SofaController::class, 'relatorio'])->name('sofas.report');
-Route::resource('sofas', SofaController::class);
+Route::resource('vendas', VendaController::class);

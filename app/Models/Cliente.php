@@ -20,9 +20,8 @@ class Cliente extends Model
         'imagem',
     ];
 
-    // Relacionamento 1:1 (Um cliente tem um endereço)
-    public function endereco()
+    public function vendas()
     {
-        return $this->hasOne(Endereco::class);
+        return $this->hasMany(Venda::class);
     }
 }

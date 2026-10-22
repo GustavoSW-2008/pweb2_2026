@@ -8,16 +8,18 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('categorias', function (Blueprint $table) {
+        Schema::create('vendas', function (Blueprint $table) {
             $table->id();
-            $table->string('nome');
-            $table->text('descricao')->nullable();
+            $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade');
+            $table->date('data_venda');
+            $table->decimal('valor_total', 10, 2);
+            $table->string('forma_pagamento');
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('categorias');
+        Schema::dropIfExists('vendas');
     }
 };

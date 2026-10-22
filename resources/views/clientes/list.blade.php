@@ -18,7 +18,6 @@
     </div>
 </div>
 
-{{-- Busca via GET ?search= --}}
 <div class="card mb-4 shadow-sm">
     <div class="card-body">
         <form action="{{ route('clientes.index') }}" method="GET" class="row g-2">
@@ -52,7 +51,6 @@
                     <th>Telefone</th>
                     <th>E-mail</th>
                     <th>Nascimento</th>
-                    <th>Endereço (1:1)</th>
                     <th class="text-center" style="width: 160px;">Ações</th>
                 </tr>
             </thead>
@@ -75,15 +73,6 @@
                     <td>{{ $cliente->telefone }}</td>
                     <td><small>{{ $cliente->email }}</small></td>
                     <td><small>{{ date('d/m/Y', strtotime($cliente->data_nascimento)) }}</small></td>
-                    <td>
-                        @if($cliente->endereco)
-                            <span class="badge bg-success-subtle text-success border border-success-subtle">
-                                <i class="bi bi-geo-alt me-1"></i>{{ $cliente->endereco->cidade }} - {{ $cliente->endereco->bairro }}
-                            </span>
-                        @else
-                            <span class="text-muted small">Sem endereço</span>
-                        @endif
-                    </td>
                     <td class="text-center">
                         <a href="{{ route('clientes.edit', $cliente->id) }}" class="btn btn-sm btn-warning">
                             <i class="bi bi-pencil"></i> Editar
@@ -101,8 +90,8 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="8" class="text-center py-4 text-muted">
-                        Nenhum cliente encontrado.
+                    <td colspan="7" class="text-center py-4 text-muted">
+                        Nenhum cliente cadastrado.
                     </td>
                 </tr>
                 @endforelse

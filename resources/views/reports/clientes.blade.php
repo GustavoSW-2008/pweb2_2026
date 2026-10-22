@@ -1,113 +1,65 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Relatório de Clientes</title>
+    <meta charset="utf-8">
+    <title>{{ $title }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            font-size: 11px;
+            font-family: sans-serif;
+            font-size: 12px;
             color: #333;
-            margin: 20px;
-        }
-        .header {
-            text-align: center;
-            border-bottom: 2px solid #1a3a5c;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-        .header h1 {
-            color: #1a3a5c;
-            font-size: 20px;
-            margin: 0;
-        }
-        .header p {
-            margin: 4px 0 0 0;
-            color: #666;
-            font-size: 11px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-top: 15px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
         }
         th, td {
-            border: 1px solid #ddd;
-            padding: 7px;
+            padding: 8px;
             text-align: left;
         }
         th {
-            background-color: #1a3a5c;
-            color: #fff;
+            background-color: #f2f2f2;
             font-weight: bold;
-            font-size: 11px;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
         }
         .text-center {
             text-align: center;
         }
-        .footer {
-            border-top: 1px solid #ddd;
-            padding-top: 10px;
-            font-size: 11px;
-            color: #777;
-            text-align: right;
-        }
-        .total-box {
-            font-weight: bold;
-            background-color: #eef2f7;
-        }
     </style>
 </head>
 <body>
+    <h2>{{ $title }}</h2>
+    <p>Data de emissão: {{ $date }}</p>
 
-    <div class="header">
-        <h1>Pausa Sofás - Sistema de Gestão</h1>
-        <p>Relatório de Clientes Cadastrados</p>
-    </div>
-
-    <table>
+    <table class="table table-bordered">
         <thead>
             <tr>
-                <th style="width: 25px;" class="text-center">#</th>
+                <th style="width: 40px;" class="text-center">#</th>
                 <th>Nome</th>
                 <th>CPF</th>
                 <th>Telefone</th>
                 <th>E-mail</th>
-                <th>Nascimento</th>
-                <th>Endereço (Cidade/Bairro)</th>
+                <th>Data de Nascimento</th>
             </tr>
         </thead>
         <tbody>
             @foreach($clientes as $index => $cliente)
             <tr>
                 <td class="text-center">{{ $index + 1 }}</td>
-                <td><strong>{{ $cliente->nome }}</strong></td>
+                <td>{{ $cliente->nome }}</td>
                 <td>{{ $cliente->cpf }}</td>
                 <td>{{ $cliente->telefone }}</td>
                 <td>{{ $cliente->email }}</td>
                 <td>{{ date('d/m/Y', strtotime($cliente->data_nascimento)) }}</td>
-                <td>
-                    @if($cliente->endereco)
-                        {{ $cliente->endereco->cidade }} - {{ $cliente->endereco->bairro }} ({{ $cliente->endereco->rua }}, {{ $cliente->endereco->numero }})
-                    @else
-                        <em>Não informado</em>
-                    @endif
-                </td>
             </tr>
             @endforeach
-            <tr class="total-box">
-                <td colspan="6">Total de Clientes Cadastrados:</td>
-                <td class="text-center">{{ count($clientes) }} clientes</td>
-            </tr>
         </tbody>
     </table>
 
-    <div class="footer">
-        Gerado em: {{ $data }} | Total de registros: {{ count($clientes) }}
-    </div>
-
+    <p class="mt-3"><strong>Total de clientes cadastrados:</strong> {{ count($clientes) }}</p>
 </body>
 </html>

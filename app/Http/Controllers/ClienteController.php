@@ -9,13 +9,11 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class ClienteController extends Controller
 {
-    // Listagem com busca por nome
     public function index(Request $request)
     {
         $search = $request->search;
 
-        $clientes = Cliente::with('endereco')
-            ->when($search, function ($query) use ($search) {
+        $clientes = Cliente::when($search, function ($query) use ($search) {
                 $query->where('nome', 'like', "%{$search}%");
             })
             ->orderBy('nome')
@@ -42,12 +40,8 @@ class ClienteController extends Controller
 
         $dados = $request->all();
 
-        // Upload de imagem do cliente
         if ($request->hasFile('imagem')) {
-            $imagem = $request->file('imagem');
-            $nomeImagem = time() . '_' . $imagem->getClientOriginalName();
-            $imagem->storeAs('imagens/clientes', $nomeImagem, 'public');
-            $dados['imagem'] = 'imagens/clientes/' . $nomeImagem;
+            $dados['imagem'] = $request->file('imagem')->store('clientes', 'public');
         }
 
         Cliente::create($dados);
@@ -73,16 +67,11 @@ class ClienteController extends Controller
 
         $dados = $request->all();
 
-        // Se enviou nova imagem, remove a antiga e salva a nova
         if ($request->hasFile('imagem')) {
             if ($cliente->imagem && Storage::disk('public')->exists($cliente->imagem)) {
                 Storage::disk('public')->delete($cliente->imagem);
             }
-
-            $imagem = $request->file('imagem');
-            $nomeImagem = time() . '_' . $imagem->getClientOriginalName();
-            $imagem->storeAs('imagens/clientes', $nomeImagem, 'public');
-            $dados['imagem'] = 'imagens/clientes/' . $nomeImagem;
+            $dados['imagem'] = $request->file('imagem')->store('clientes', 'public');
         }
 
         $cliente->update($dados);
@@ -92,7 +81,6 @@ class ClienteController extends Controller
 
     public function destroy(Cliente $cliente)
     {
-        // Exclui o arquivo físico da imagem
         if ($cliente->imagem && Storage::disk('public')->exists($cliente->imagem)) {
             Storage::disk('public')->delete($cliente->imagem);
         }
@@ -102,15 +90,17 @@ class ClienteController extends Controller
         return redirect()->route('clientes.index')->with('success', 'Cliente removido com sucesso!');
     }
 
-    // Relatório de Clientes em PDF
     public function relatorio()
     {
-        $clientes = Cliente::with('endereco')->orderBy('nome')->get();
+        $clientes = Cliente::orderBy('nome')->get();
 
-        $pdf = Pdf::loadView('reports.clientes', [
+        $data = [
+            'title'    => 'Relatório de Clientes Cadastrados',
+            'date'     => date('d/m/Y H:i'),
             'clientes' => $clientes,
-            'data'     => date('d/m/Y H:i'),
-        ]);
+        ];
+
+        $pdf = Pdf::loadView('reports.clientes', $data);
 
         return $pdf->download('relatorio_clientes.pdf');
     }

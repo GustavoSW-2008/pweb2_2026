@@ -10,9 +10,6 @@ return new class extends Migration
     {
         Schema::create('sofas', function (Blueprint $table) {
             $table->id();
-            // Relacionamento 1:N com Categoria
-            $table->foreignId('categoria_id')->constrained('categorias')->onDelete('cascade');
-            // Relacionamento 1:N com Fornecedor
             $table->foreignId('fornecedor_id')->constrained('fornecedores')->onDelete('cascade');
             $table->string('modelo');
             $table->string('cor');

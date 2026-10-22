@@ -12,7 +12,6 @@ class Sofa extends Model
     protected $table = 'sofas';
 
     protected $fillable = [
-        'categoria_id',
         'fornecedor_id',
         'modelo',
         'cor',
@@ -21,15 +20,20 @@ class Sofa extends Model
         'imagem',
     ];
 
-    // Relacionamento 1:N (Sofá pertence a uma Categoria)
-    public function categoria()
-    {
-        return $this->belongsTo(Categoria::class);
-    }
-
-    // Relacionamento 1:N (Sofá pertence a um Fornecedor)
     public function fornecedor()
     {
         return $this->belongsTo(Fornecedor::class);
+    }
+
+    public function fichaTecnica()
+    {
+        return $this->hasOne(FichaTecnica::class);
+    }
+
+    public function vendas()
+    {
+        return $this->belongsToMany(Venda::class, 'sofa_venda')
+            ->withPivot('quantidade', 'preco_unitario')
+            ->withTimestamps();
     }
 }

@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('titulo', 'Pausa Sofás - Sistema de Gestão')</title>
 
-    <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
@@ -77,7 +75,6 @@
 </head>
 <body>
 
-    <!-- Barra de Navegação -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom mb-4 sticky-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="{{ route('dashboard') }}">
@@ -95,13 +92,13 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('categorias.*') ? 'active' : '' }}" href="{{ route('categorias.index') }}">
-                            <i class="bi bi-tags me-1"></i> Categorias
+                        <a class="nav-link {{ request()->routeIs('sofas.*') ? 'active' : '' }}" href="{{ route('sofas.index') }}">
+                            <i class="bi bi-box-seam me-1"></i> Sofás
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('fornecedores.*') ? 'active' : '' }}" href="{{ route('fornecedores.index') }}">
-                            <i class="bi bi-truck me-1"></i> Fornecedores
+                        <a class="nav-link {{ request()->routeIs('fichas-tecnicas.*') ? 'active' : '' }}" href="{{ route('fichas-tecnicas.index') }}">
+                            <i class="bi bi-card-checklist me-1"></i> Fichas Técnicas
                         </a>
                     </li>
                     <li class="nav-item">
@@ -110,17 +107,16 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('enderecos.*') ? 'active' : '' }}" href="{{ route('enderecos.index') }}">
-                            <i class="bi bi-geo-alt me-1"></i> Endereços
+                        <a class="nav-link {{ request()->routeIs('fornecedores.*') ? 'active' : '' }}" href="{{ route('fornecedores.index') }}">
+                            <i class="bi bi-truck me-1"></i> Fornecedores
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('sofas.*') ? 'active' : '' }}" href="{{ route('sofas.index') }}">
-                            <i class="bi bi-box-seam me-1"></i> Sofás
+                        <a class="nav-link {{ request()->routeIs('vendas.*') ? 'active' : '' }}" href="{{ route('vendas.index') }}">
+                            <i class="bi bi-cart-check me-1"></i> Vendas
                         </a>
                     </li>
 
-                    <!-- Relatórios PDF -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-file-earmark-pdf me-1 text-danger"></i> Relatórios PDF
@@ -143,10 +139,8 @@
         </div>
     </nav>
 
-    <!-- Conteúdo Principal -->
     <main class="container my-3 flex-grow-1">
 
-        <!-- Mensagens de Sucesso -->
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
                 <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
@@ -154,7 +148,6 @@
             </div>
         @endif
 
-        <!-- Mensagens de Erro -->
         @if (session('error'))
             <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
                 <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('error') }}
@@ -162,7 +155,6 @@
             </div>
         @endif
 
-        <!-- Erros de Validação -->
         @if ($errors->any())
             <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
                 <strong><i class="bi bi-x-octagon-fill me-2"></i> Verifique os erros no formulário:</strong>
@@ -179,14 +171,12 @@
         @yield('conteudo')
     </main>
 
-    <!-- Rodapé -->
     <footer>
         <div class="container text-center">
             <span>&copy; {{ date('Y') }} Pausa Sofás - IFSC Câmpus Chapecó</span>
         </div>
     </footer>
 
-    <!-- Bootstrap 5.3 Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     @yield('scripts')
 </body>
