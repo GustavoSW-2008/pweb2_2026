@@ -8,18 +8,23 @@
         <h2 class="fw-bold mb-0"><i class="bi bi-people me-2"></i>Listagem de Clientes</h2>
         <small class="text-muted">Gerenciamento dos clientes da loja</small>
     </div>
-    <a href="{{ route('clientes.create') }}" class="btn btn-success">
-        <i class="bi bi-person-plus me-1"></i> Novo Cliente
-    </a>
+    <div class="d-flex gap-2">
+        <a href="{{ route('clientes.report') }}" class="btn btn-outline-danger">
+            <i class="bi bi-file-earmark-pdf me-1"></i> Relatório PDF
+        </a>
+        <a href="{{ route('clientes.create') }}" class="btn btn-success">
+            <i class="bi bi-person-plus me-1"></i> Novo Cliente
+        </a>
+    </div>
 </div>
 
 {{-- Busca via GET ?search= --}}
-<div class="card mb-4">
+<div class="card mb-4 shadow-sm">
     <div class="card-body">
         <form action="{{ route('clientes.index') }}" method="GET" class="row g-2">
             <div class="col-md-9">
                 <input type="text" name="search" class="form-control"
-                    placeholder="Pesquisar por nome..."
+                    placeholder="Pesquisar cliente por nome..."
                     value="{{ $search ?? '' }}">
             </div>
             <div class="col-md-3 d-flex gap-2">
@@ -27,7 +32,7 @@
                     <i class="bi bi-search me-1"></i> Buscar
                 </button>
                 @if(!empty($search))
-                    <a href="{{ route('clientes.index') }}" class="btn btn-outline-secondary">
+                    <a href="{{ route('clientes.index') }}" class="btn btn-outline-secondary" title="Limpar busca">
                         <i class="bi bi-x-lg"></i>
                     </a>
                 @endif
@@ -45,9 +50,10 @@
                     <th>Nome</th>
                     <th>CPF</th>
                     <th>Telefone</th>
-                    <th>Idade</th>
-                    <th>Endereço</th>
-                    <th class="text-center" style="width: 150px;">Ações</th>
+                    <th>E-mail</th>
+                    <th>Nascimento</th>
+                    <th>Endereço (1:1)</th>
+                    <th class="text-center" style="width: 160px;">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -67,15 +73,24 @@
                     <td class="fw-semibold">{{ $cliente->nome }}</td>
                     <td><code>{{ $cliente->cpf }}</code></td>
                     <td>{{ $cliente->telefone }}</td>
-                    <td>{{ $cliente->idade ? $cliente->idade . ' anos' : '-' }}</td>
-                    <td><small class="text-muted">{{ $cliente->endereco ?? '-' }}</small></td>
+                    <td><small>{{ $cliente->email }}</small></td>
+                    <td><small>{{ date('d/m/Y', strtotime($cliente->data_nascimento)) }}</small></td>
+                    <td>
+                        @if($cliente->endereco)
+                            <span class="badge bg-success-subtle text-success border border-success-subtle">
+                                <i class="bi bi-geo-alt me-1"></i>{{ $cliente->endereco->cidade }} - {{ $cliente->endereco->bairro }}
+                            </span>
+                        @else
+                            <span class="text-muted small">Sem endereço</span>
+                        @endif
+                    </td>
                     <td class="text-center">
                         <a href="{{ route('clientes.edit', $cliente->id) }}" class="btn btn-sm btn-warning">
                             <i class="bi bi-pencil"></i> Editar
                         </a>
                         <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST"
                               class="d-inline-block"
-                              onsubmit="return confirm('Deseja remover o cliente {{ $cliente->nome }}?')">
+                              onsubmit="return confirm('Deseja realmente remover o cliente {{ $cliente->nome }}?')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger">
@@ -86,7 +101,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="text-center py-4 text-muted">
+                    <td colspan="8" class="text-center py-4 text-muted">
                         Nenhum cliente encontrado.
                     </td>
                 </tr>

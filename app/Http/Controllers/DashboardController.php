@@ -2,68 +2,58 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cliente;
+use App\Models\Categoria;
 use App\Models\Fornecedor;
+use App\Models\Cliente;
+use App\Models\Endereco;
 use App\Models\Sofa;
-use App\Models\Venda;
-use App\Models\FichaTecnica;
-use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $totalClientes    = Cliente::count();
+        // Contagens totais para os cards do dashboard
+        $totalCategorias    = Categoria::count();
         $totalFornecedores = Fornecedor::count();
-        $totalSofas       = Sofa::count();
-        $totalVendas      = Venda::count();
-        $totalFichas      = FichaTecnica::count();
-        $faturamentoTotal = Venda::sum('valor_total');
+        $totalClientes     = Cliente::count();
+        $totalEnderecos    = Endereco::count();
+        $totalSofas        = Sofa::count();
+        $totalEstoque      = Sofa::sum('quantidade_estoque');
 
-        $ultimasVendas = Venda::with(['cliente', 'sofa'])
-            ->orderBy('data_venda', 'desc')
+        // Últimos registros para as tabelas resumo
+        $ultimosSofas = Sofa::with(['categoria', 'fornecedor'])
+            ->orderBy('created_at', 'desc')
             ->take(5)
             ->get();
 
-        $ultimosClientes = Cliente::orderBy('created_at', 'desc')
+        $ultimosClientes = Cliente::with('endereco')
+            ->orderBy('created_at', 'desc')
             ->take(5)
             ->get();
 
-        // Dados para Gráfico 1: Sofás por Fornecedor (Pizza - Chart.js)
+        // Dados para Gráfico 1: Pizza - Sofás por Categoria
+        $sofasPorCategoria = Categoria::withCount('sofas')->get();
+        $labelsCategorias  = $sofasPorCategoria->pluck('nome');
+        $dadosCategorias   = $sofasPorCategoria->pluck('sofas_count');
+
+        // Dados para Gráfico 2: Barras - Sofás por Fornecedor
         $sofasPorFornecedor = Fornecedor::withCount('sofas')->get();
-        $labelsFornecedor   = $sofasPorFornecedor->pluck('nome');
-        $dadosFornecedor    = $sofasPorFornecedor->pluck('sofas_count');
-
-        // Dados para Gráfico 2: Vendas por mês (Barras - Chart.js)
-        $vendasPorMes = Venda::select(
-            DB::raw('MONTH(data_venda) as mes'),
-            DB::raw('SUM(valor_total) as total')
-        )
-            ->groupBy('mes')
-            ->orderBy('mes')
-            ->get();
-
-        $meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-        $labelsVendas = [];
-        $dadosVendas  = [];
-        foreach ($vendasPorMes as $item) {
-            $labelsVendas[] = $meses[$item->mes - 1];
-            $dadosVendas[]  = $item->total;
-        }
+        $labelsFornecedores = $sofasPorFornecedor->pluck('nome_fantasia');
+        $dadosFornecedores  = $sofasPorFornecedor->pluck('sofas_count');
 
         return view('dashboard', compact(
-            'totalClientes',
+            'totalCategorias',
             'totalFornecedores',
+            'totalClientes',
+            'totalEnderecos',
             'totalSofas',
-            'totalVendas',
-            'totalFichas',
-            'faturamentoTotal',
-            'ultimasVendas',
+            'totalEstoque',
+            'ultimosSofas',
             'ultimosClientes',
-            'labelsFornecedor',
-            'dadosFornecedor',
-            'labelsVendas',
-            'dadosVendas'
+            'labelsCategorias',
+            'dadosCategorias',
+            'labelsFornecedores',
+            'dadosFornecedores'
         ));
     }
 }

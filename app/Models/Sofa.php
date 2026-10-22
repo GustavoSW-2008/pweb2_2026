@@ -9,29 +9,27 @@ class Sofa extends Model
 {
     use HasFactory;
 
+    protected $table = 'sofas';
+
     protected $fillable = [
+        'categoria_id',
+        'fornecedor_id',
         'modelo',
         'cor',
         'preco',
-        'fornecedor_id',
+        'quantidade_estoque',
         'imagem',
     ];
 
-    // Relacionamento 1:N com Fornecedor
+    // Relacionamento 1:N (Sofá pertence a uma Categoria)
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class);
+    }
+
+    // Relacionamento 1:N (Sofá pertence a um Fornecedor)
     public function fornecedor()
     {
         return $this->belongsTo(Fornecedor::class);
-    }
-
-    // Relacionamento 1:1 com Ficha Técnica
-    public function fichaTecnica()
-    {
-        return $this->hasOne(FichaTecnica::class);
-    }
-
-    // Relacionamento 1:N com Vendas
-    public function vendas()
-    {
-        return $this->hasMany(Venda::class);
     }
 }

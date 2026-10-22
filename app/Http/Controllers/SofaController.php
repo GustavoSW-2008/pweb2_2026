@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sofa;
+use App\Models\Categoria;
 use App\Models\Fornecedor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -10,11 +11,12 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class SofaController extends Controller
 {
+    // Listagem com busca por modelo
     public function index(Request $request)
     {
         $search = $request->search;
 
-        $sofas = Sofa::with(['fornecedor', 'fichaTecnica'])
+        $sofas = Sofa::with(['categoria', 'fornecedor'])
             ->when($search, function ($query) use ($search) {
                 $query->where('modelo', 'like', "%{$search}%");
             })
@@ -26,22 +28,26 @@ class SofaController extends Controller
 
     public function create()
     {
-        $fornecedores = Fornecedor::orderBy('nome')->get();
-        return view('sofas.form', compact('fornecedores'));
+        $categorias   = Categoria::orderBy('nome')->get();
+        $fornecedores = Fornecedor::orderBy('nome_fantasia')->get();
+        return view('sofas.form', compact('categorias', 'fornecedores'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'modelo'       => 'required|max:255',
-            'cor'          => 'required|max:100',
-            'preco'        => 'required|numeric|min:0',
-            'fornecedor_id'=> 'required|exists:fornecedores,id',
-            'imagem'       => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
+            'modelo'             => 'required|max:255',
+            'cor'                => 'required|max:100',
+            'preco'              => 'required|numeric|min:0',
+            'quantidade_estoque' => 'required|integer|min:0',
+            'categoria_id'       => 'required|exists:categorias,id',
+            'fornecedor_id'      => 'required|exists:fornecedores,id',
+            'imagem'             => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
         ]);
 
         $dados = $request->all();
 
+        // Upload de imagem do sofá
         if ($request->hasFile('imagem')) {
             $imagem = $request->file('imagem');
             $nomeImagem = time() . '_' . $imagem->getClientOriginalName();
@@ -56,24 +62,27 @@ class SofaController extends Controller
 
     public function edit(Sofa $sofa)
     {
-        $fornecedores = Fornecedor::orderBy('nome')->get();
-        return view('sofas.form', compact('sofa', 'fornecedores'));
+        $categorias   = Categoria::orderBy('nome')->get();
+        $fornecedores = Fornecedor::orderBy('nome_fantasia')->get();
+        return view('sofas.form', compact('sofa', 'categorias', 'fornecedores'));
     }
 
     public function update(Request $request, Sofa $sofa)
     {
         $request->validate([
-            'modelo'       => 'required|max:255',
-            'cor'          => 'required|max:100',
-            'preco'        => 'required|numeric|min:0',
-            'fornecedor_id'=> 'required|exists:fornecedores,id',
-            'imagem'       => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
+            'modelo'             => 'required|max:255',
+            'cor'                => 'required|max:100',
+            'preco'              => 'required|numeric|min:0',
+            'quantidade_estoque' => 'required|integer|min:0',
+            'categoria_id'       => 'required|exists:categorias,id',
+            'fornecedor_id'      => 'required|exists:fornecedores,id',
+            'imagem'             => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
         ]);
 
         $dados = $request->all();
 
+        // Se enviou nova imagem, remove a antiga e salva a nova
         if ($request->hasFile('imagem')) {
-            // Remove imagem antiga se existir
             if ($sofa->imagem && Storage::disk('public')->exists($sofa->imagem)) {
                 Storage::disk('public')->delete($sofa->imagem);
             }
@@ -91,11 +100,7 @@ class SofaController extends Controller
 
     public function destroy(Sofa $sofa)
     {
-        if ($sofa->vendas()->count() > 0) {
-            return redirect()->route('sofas.index')
-                ->with('error', 'Não é possível remover o sofá pois há vendas vinculadas a ele!');
-        }
-
+        // Exclusão física da imagem do disco
         if ($sofa->imagem && Storage::disk('public')->exists($sofa->imagem)) {
             Storage::disk('public')->delete($sofa->imagem);
         }
@@ -105,9 +110,10 @@ class SofaController extends Controller
         return redirect()->route('sofas.index')->with('success', 'Sofá removido com sucesso!');
     }
 
-    public function report()
+    // Relatório de Sofás em Estoque em PDF
+    public function relatorio()
     {
-        $sofas = Sofa::with(['fornecedor', 'fichaTecnica'])->orderBy('modelo')->get();
+        $sofas = Sofa::with(['categoria', 'fornecedor'])->orderBy('modelo')->get();
 
         $pdf = Pdf::loadView('reports.sofas', [
             'sofas' => $sofas,

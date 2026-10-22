@@ -6,10 +6,10 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
         <h2 class="fw-bold mb-0"><i class="bi bi-box-seam me-2"></i>Catálogo de Sofás</h2>
-        <small class="text-muted">Gerenciamento dos sofás da loja</small>
+        <small class="text-muted">Gerenciamento dos modelos de sofás em estoque</small>
     </div>
     <div class="d-flex gap-2">
-        <a href="{{ route('sofas.report') }}" class="btn btn-danger">
+        <a href="{{ route('sofas.report') }}" class="btn btn-outline-danger">
             <i class="bi bi-file-earmark-pdf me-1"></i> Relatório PDF
         </a>
         <a href="{{ route('sofas.create') }}" class="btn btn-success">
@@ -19,12 +19,12 @@
 </div>
 
 {{-- Busca via GET ?search= --}}
-<div class="card mb-4">
+<div class="card mb-4 shadow-sm">
     <div class="card-body">
         <form action="{{ route('sofas.index') }}" method="GET" class="row g-2">
             <div class="col-md-9">
                 <input type="text" name="search" class="form-control"
-                    placeholder="Pesquisar por modelo..."
+                    placeholder="Pesquisar por modelo do sofá..."
                     value="{{ $search ?? '' }}">
             </div>
             <div class="col-md-3 d-flex gap-2">
@@ -32,7 +32,7 @@
                     <i class="bi bi-search me-1"></i> Buscar
                 </button>
                 @if(!empty($search))
-                    <a href="{{ route('sofas.index') }}" class="btn btn-outline-secondary">
+                    <a href="{{ route('sofas.index') }}" class="btn btn-outline-secondary" title="Limpar busca">
                         <i class="bi bi-x-lg"></i>
                     </a>
                 @endif
@@ -49,10 +49,11 @@
                     <th style="width: 80px;">Foto</th>
                     <th>Modelo</th>
                     <th>Cor</th>
-                    <th>Preço</th>
-                    <th>Fornecedor</th>
-                    <th class="text-center">Ficha Técnica</th>
-                    <th class="text-center" style="width: 150px;">Ações</th>
+                    <th>Categoria (1:N)</th>
+                    <th>Fornecedor (1:N)</th>
+                    <th>Preço Unitário</th>
+                    <th class="text-center">Estoque</th>
+                    <th class="text-center" style="width: 160px;">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -65,20 +66,19 @@
                                  class="product-thumbnail">
                         @else
                             <div class="product-thumbnail d-flex align-items-center justify-content-center bg-light text-secondary">
-                                <i class="bi bi-image fs-4"></i>
+                                <i class="bi bi-box-seam fs-4"></i>
                             </div>
                         @endif
                     </td>
                     <td class="fw-semibold">{{ $sofa->modelo }}</td>
                     <td>{{ $sofa->cor }}</td>
-                    <td class="fw-bold text-success">R$ {{ number_format($sofa->preco, 2, ',', '.') }}</td>
-                    <td>{{ $sofa->fornecedor->nome ?? '-' }}</td>
+                    <td><span class="badge bg-secondary">{{ $sofa->categoria->nome ?? '-' }}</span></td>
+                    <td><small class="text-muted">{{ $sofa->fornecedor->nome_fantasia ?? '-' }}</small></td>
+                    <td class="text-success fw-bold">R$ {{ number_format($sofa->preco, 2, ',', '.') }}</td>
                     <td class="text-center">
-                        @if($sofa->fichaTecnica)
-                            <span class="badge bg-success">{{ $sofa->fichaTecnica->tecido }}</span>
-                        @else
-                            <span class="badge bg-secondary">Sem ficha</span>
-                        @endif
+                        <span class="badge {{ $sofa->quantidade_estoque > 0 ? 'bg-success' : 'bg-danger' }}">
+                            {{ $sofa->quantidade_estoque }} un
+                        </span>
                     </td>
                     <td class="text-center">
                         <a href="{{ route('sofas.edit', $sofa->id) }}" class="btn btn-sm btn-warning">
@@ -86,7 +86,7 @@
                         </a>
                         <form action="{{ route('sofas.destroy', $sofa->id) }}" method="POST"
                               class="d-inline-block"
-                              onsubmit="return confirm('Deseja remover este sofá?')">
+                              onsubmit="return confirm('Deseja realmente remover o sofá {{ $sofa->modelo }}?')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger">
@@ -97,7 +97,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="text-center py-4 text-muted">
+                    <td colspan="8" class="text-center py-4 text-muted">
                         Nenhum sofá encontrado.
                     </td>
                 </tr>
@@ -106,7 +106,7 @@
         </table>
     </div>
     <div class="card-footer text-muted small">
-        Total: <strong>{{ count($sofas) }}</strong> sofás
+        Total: <strong>{{ count($sofas) }}</strong> modelos de sofás cadastrados
     </div>
 </div>
 @endsection

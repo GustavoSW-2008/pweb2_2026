@@ -25,7 +25,7 @@
                         <div class="col-md-8">
                             <label for="nome" class="form-label fw-semibold">Nome Completo <span class="text-danger">*</span></label>
                             <input type="text" name="nome" id="nome" class="form-control @error('nome') is-invalid @enderror"
-                                   value="{{ old('nome', $cliente->nome ?? '') }}" placeholder="Ex: João da Silva" required>
+                                   value="{{ old('nome', $cliente->nome ?? '') }}" placeholder="Ex: Ana Carolina Ferreira" required>
                             @error('nome')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -40,8 +40,8 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="telefone" class="form-label fw-semibold">Telefone / WhatsApp <span class="text-danger">*</span></label>
+                        <div class="col-md-4">
+                            <label for="telefone" class="form-label fw-semibold">Telefone <span class="text-danger">*</span></label>
                             <input type="text" name="telefone" id="telefone" class="form-control @error('telefone') is-invalid @enderror"
                                    value="{{ old('telefone', $cliente->telefone ?? '') }}" placeholder="(00) 00000-0000" required>
                             @error('telefone')
@@ -49,40 +49,40 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="idade" class="form-label fw-semibold">Idade</label>
-                            <input type="number" name="idade" id="idade" min="0" max="150" class="form-control @error('idade') is-invalid @enderror"
-                                   value="{{ old('idade', $cliente->idade ?? '') }}" placeholder="Ex: 32">
-                            @error('idade')
+                        <div class="col-md-4">
+                            <label for="email" class="form-label fw-semibold">E-mail <span class="text-danger">*</span></label>
+                            <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror"
+                                   value="{{ old('email', $cliente->email ?? '') }}" placeholder="cliente@email.com" required>
+                            @error('email')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        <div class="col-12">
-                            <label for="endereco" class="form-label fw-semibold">Endereço Completo</label>
-                            <input type="text" name="endereco" id="endereco" class="form-control @error('endereco') is-invalid @enderror"
-                                   value="{{ old('endereco', $cliente->endereco ?? '') }}" placeholder="Rua, número, bairro, cidade">
-                            @error('endereco')
+                        <div class="col-md-4">
+                            <label for="data_nascimento" class="form-label fw-semibold">Data de Nascimento <span class="text-danger">*</span></label>
+                            <input type="date" name="data_nascimento" id="data_nascimento" class="form-control @error('data_nascimento') is-invalid @enderror"
+                                   value="{{ old('data_nascimento', $cliente->data_nascimento ?? '') }}" required>
+                            @error('data_nascimento')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <!-- Upload de Foto do Cliente -->
                         <div class="col-12">
-                            <label class="form-label fw-semibold"><i class="bi bi-camera me-1"></i> Foto de Perfil do Cliente</label>
+                            <label class="form-label fw-semibold"><i class="bi bi-camera me-1"></i> Foto de Perfil (Upload de Arquivo)</label>
                             <div class="d-flex align-items-center gap-3 p-3 bg-light rounded border">
                                 @if(!empty($cliente->imagem))
                                     <div>
-                                        <img src="{{ asset('storage/' . $cliente->imagem) }}" alt="{{ $cliente->nome }}" class="rounded-circle border" style="width: 80px; height: 80px; object-fit: cover;">
+                                        <img src="{{ asset('storage/' . $cliente->imagem) }}" alt="{{ $cliente->nome }}" class="rounded-circle border" style="width: 70px; height: 70px; object-fit: cover;">
                                     </div>
                                 @else
-                                    <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
-                                        <i class="bi bi-person fs-1"></i>
+                                    <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                                        <i class="bi bi-person fs-2"></i>
                                     </div>
                                 @endif
                                 <div class="flex-grow-1">
                                     <input type="file" name="imagem" id="imagem" class="form-control @error('imagem') is-invalid @enderror" accept="image/*">
-                                    <small class="text-muted d-block mt-1">Formatos aceitos: PNG, JPG, JPEG ou WEBP (máx. 2MB). Deixe em branco para manter a foto atual.</small>
+                                    <small class="text-muted d-block mt-1">Formatos aceitos: PNG, JPG, JPEG ou WEBP (máx. 2MB). Deixe vazio para manter a foto atual.</small>
                                     @error('imagem')
                                         <div class="invalid-feedback d-block">{{ $message }}</div>
                                     @enderror

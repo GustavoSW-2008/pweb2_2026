@@ -10,16 +10,50 @@ class ClienteSeeder extends Seeder
     public function run(): void
     {
         $clientes = [
-            ['nome' => 'Ana Clara Santos', 'cpf' => '111.222.333-44', 'telefone' => '(49) 99887-1122', 'idade' => 28, 'endereco' => 'Rua das Flores, 120, Centro', 'imagem' => null],
-            ['nome' => 'Bruno Henrique Lima', 'cpf' => '222.333.444-55', 'telefone' => '(49) 99123-4567', 'idade' => 35, 'endereco' => 'Av. Brasil, 450, Jardim Itália', 'imagem' => null],
-            ['nome' => 'Camila Rodrigues Alves', 'cpf' => '333.444.555-66', 'telefone' => '(49) 98877-6655', 'idade' => 42, 'endereco' => 'Rua XV de Novembro, 890, Centro', 'imagem' => null],
-            ['nome' => 'Diego Fernando Costa', 'cpf' => '444.555.666-77', 'telefone' => '(49) 99911-2233', 'idade' => 31, 'endereco' => 'Rua Marechal Deodoro, 305, Efapi', 'imagem' => null],
-            ['nome' => 'Eduarda Meireles Souza', 'cpf' => '555.666.777-88', 'telefone' => '(49) 99188-7744', 'idade' => 24, 'endereco' => 'Av. Getúlio Vargas, 1420, Passo dos Fortes', 'imagem' => null],
-            ['nome' => 'Felipe Augusto Oliveira', 'cpf' => '666.777.888-99', 'telefone' => '(49) 98433-2211', 'idade' => 39, 'endereco' => 'Rua Uruguai, 67, Santa Maria', 'imagem' => null],
+            [
+                'nome'            => 'Ana Carolina Ferreira',
+                'cpf'             => '123.456.789-01',
+                'telefone'        => '(49) 99812-3456',
+                'email'           => 'ana.ferreira@gmail.com',
+                'data_nascimento' => '1992-05-14',
+                'imagem'          => null,
+            ],
+            [
+                'nome'            => 'Lucas Gabriel de Souza',
+                'cpf'             => '234.567.890-12',
+                'telefone'        => '(49) 98845-6789',
+                'email'           => 'lucas.souza@hotmail.com',
+                'data_nascimento' => '1988-11-23',
+                'imagem'          => null,
+            ],
+            [
+                'nome'            => 'Mariana Silveira Ramos',
+                'cpf'             => '345.678.901-23',
+                'telefone'        => '(49) 99123-7890',
+                'email'           => 'mariana.ramos@outlook.com',
+                'data_nascimento' => '1995-02-18',
+                'imagem'          => null,
+            ],
+            [
+                'nome'            => 'Rafael Mendonça Ribeiro',
+                'cpf'             => '456.789.012-34',
+                'telefone'        => '(49) 99934-5678',
+                'email'           => 'rafael.ribeiro@yahoo.com.br',
+                'data_nascimento' => '1981-08-30',
+                'imagem'          => null,
+            ],
+            [
+                'nome'            => 'Juliana Beatriz Santos',
+                'cpf'             => '567.890.123-45',
+                'telefone'        => '(49) 98412-9012',
+                'email'           => 'juliana.santos@gmail.com',
+                'data_nascimento' => '1999-07-09',
+                'imagem'          => null,
+            ],
         ];
 
-        foreach ($clientes as $cliente) {
-            Cliente::updateOrCreate(['cpf' => $cliente['cpf']], $cliente);
+        foreach ($clientes as $cli) {
+            Cliente::create($cli);
         }
     }
 }

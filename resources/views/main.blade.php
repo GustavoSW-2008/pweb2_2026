@@ -77,7 +77,7 @@
 </head>
 <body>
 
-    <!-- Navbar Principal -->
+    <!-- Barra de Navegação -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom mb-4 sticky-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="{{ route('dashboard') }}">
@@ -95,8 +95,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('clientes.*') ? 'active' : '' }}" href="{{ route('clientes.index') }}">
-                            <i class="bi bi-people me-1"></i> Clientes
+                        <a class="nav-link {{ request()->routeIs('categorias.*') ? 'active' : '' }}" href="{{ route('categorias.index') }}">
+                            <i class="bi bi-tags me-1"></i> Categorias
                         </a>
                     </li>
                     <li class="nav-item">
@@ -105,18 +105,18 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('clientes.*') ? 'active' : '' }}" href="{{ route('clientes.index') }}">
+                            <i class="bi bi-people me-1"></i> Clientes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('enderecos.*') ? 'active' : '' }}" href="{{ route('enderecos.index') }}">
+                            <i class="bi bi-geo-alt me-1"></i> Endereços
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('sofas.*') ? 'active' : '' }}" href="{{ route('sofas.index') }}">
                             <i class="bi bi-box-seam me-1"></i> Sofás
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('vendas.*') ? 'active' : '' }}" href="{{ route('vendas.index') }}">
-                            <i class="bi bi-cart-check me-1"></i> Vendas
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('fichas.*') ? 'active' : '' }}" href="{{ route('fichas.index') }}">
-                            <i class="bi bi-card-checklist me-1"></i> Fichas Técnicas
                         </a>
                     </li>
 
@@ -132,41 +132,12 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{{ route('vendas.report') }}">
-                                    <i class="bi bi-file-pdf text-danger me-2"></i> Relatório de Vendas
+                                <a class="dropdown-item" href="{{ route('clientes.report') }}">
+                                    <i class="bi bi-file-pdf text-danger me-2"></i> Relatório de Clientes
                                 </a>
                             </li>
                         </ul>
                     </li>
-                </ul>
-
-                <!-- Sessão / Usuário -->
-                <ul class="navbar-nav ms-auto align-items-center">
-                    @auth
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
-                                <i class="bi bi-person-circle fs-5 me-2"></i> {{ Auth::user()->name }}
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><span class="dropdown-item-text text-muted small">{{ Auth::user()->email }}</span></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li>
-                                    <form action="{{ route('logout') }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item text-danger">
-                                            <i class="bi bi-box-arrow-right me-2"></i> Sair do Sistema
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
-                    @else
-                        <li class="nav-item">
-                            <a class="nav-link btn btn-outline-light btn-sm text-white px-3" href="{{ route('login') }}">
-                                <i class="bi bi-box-arrow-in-right me-1"></i> Entrar
-                            </a>
-                        </li>
-                    @endauth
                 </ul>
             </div>
         </div>
@@ -211,7 +182,7 @@
     <!-- Rodapé -->
     <footer>
         <div class="container text-center">
-            <span>&copy; {{ date('Y') }} Pausa Sofás</span>
+            <span>&copy; {{ date('Y') }} Pausa Sofás - IFSC Câmpus Chapecó</span>
         </div>
     </footer>
 

@@ -1,43 +1,31 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\FornecedorController;
+use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\EnderecoController;
 use App\Http\Controllers\SofaController;
-use App\Http\Controllers\VendaController;
-use App\Http\Controllers\FichaTecnicaController;
 
-// Autenticação
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+// Painel de Controle (Dashboard)
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-// Rotas protegidas (requer login)
-Route::middleware(['auth'])->group(function () {
+// 1. Categorias (CRUD + busca ?search=)
+Route::resource('categorias', CategoriaController::class);
 
-    // Dashboard
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+// 2. Fornecedores (CRUD + busca ?search=)
+Route::resource('fornecedores', FornecedorController::class)->parameters([
+    'fornecedores' => 'fornecedor',
+]);
 
-    // 1. Clientes (CRUD + busca via GET ?search=)
-    Route::resource('clientes', ClienteController::class);
+// 3. Clientes (CRUD + busca ?search= + Relatório PDF + Upload)
+Route::get('/clientes/relatorio', [ClienteController::class, 'relatorio'])->name('clientes.report');
+Route::resource('clientes', ClienteController::class);
 
-    // 2. Fornecedores (CRUD + busca via GET ?search=)
-    Route::resource('fornecedores', FornecedorController::class)->parameters([
-        'fornecedores' => 'fornecedor',
-    ]);
+// 4. Endereços (CRUD + busca ?search= - Relacionamento 1:1 com Cliente)
+Route::resource('enderecos', EnderecoController::class);
 
-    // 3. Sofás (CRUD + busca via GET ?search= + Relatório PDF)
-    Route::get('/sofas/relatorio', [SofaController::class, 'report'])->name('sofas.report');
-    Route::resource('sofas', SofaController::class);
-
-    // 4. Vendas (CRUD + busca via GET ?search= + Relatório PDF)
-    Route::get('/vendas/relatorio', [VendaController::class, 'report'])->name('vendas.report');
-    Route::resource('vendas', VendaController::class);
-
-    // 5. Fichas Técnicas (CRUD + busca via GET ?search=) - Relacionamento 1:1 com Sofá
-    Route::resource('fichas', FichaTecnicaController::class)->parameters([
-        'fichas' => 'ficha',
-    ]);
-});
+// 5. Sofás (CRUD + busca ?search= + Relatório PDF + Upload - Relacionamento 1:N)
+Route::get('/sofas/relatorio', [SofaController::class, 'relatorio'])->name('sofas.report');
+Route::resource('sofas', SofaController::class);

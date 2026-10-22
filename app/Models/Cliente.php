@@ -9,17 +9,20 @@ class Cliente extends Model
 {
     use HasFactory;
 
+    protected $table = 'clientes';
+
     protected $fillable = [
         'nome',
         'cpf',
         'telefone',
-        'idade',
-        'endereco',
+        'email',
+        'data_nascimento',
         'imagem',
     ];
 
-    public function vendas()
+    // Relacionamento 1:1 (Um cliente tem um endereço)
+    public function endereco()
     {
-        return $this->hasMany(Venda::class);
+        return $this->hasOne(Endereco::class);
     }
 }

@@ -4,64 +4,70 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Sofa;
-use App\Models\Fornecedor;
 
 class SofaSeeder extends Seeder
 {
     public function run(): void
     {
-        $fornecedores = Fornecedor::all();
-        if ($fornecedores->isEmpty()) {
-            return;
-        }
-
         $sofas = [
             [
-                'modelo' => 'Sofá Retrátil e Reclinável Sevilha 3 Lugares',
-                'cor' => 'Cinza Chumbo',
-                'preco' => 2899.90,
-                'fornecedor_id' => $fornecedores[0]->id,
-                'imagem' => 'imagem/sofa/sofa_1.jpg',
+                'categoria_id'       => 1, // Retrátil e Reclinável
+                'fornecedor_id'      => 1, // Herval
+                'modelo'             => 'Sofá Sevilha 3 Lugares Retrátil',
+                'cor'                => 'Cinza Chumbo',
+                'preco'              => 2899.90,
+                'quantidade_estoque' => 8,
+                'imagem'             => null,
             ],
             [
-                'modelo' => 'Sofá Canto Living Florença 5 Lugares',
-                'cor' => 'Bege Linho',
-                'preco' => 4590.00,
-                'fornecedor_id' => $fornecedores[1]->id ?? $fornecedores[0]->id,
-                'imagem' => 'imagem/sofa/sofa_2.jpg',
+                'categoria_id'       => 1, // Retrátil e Reclinável
+                'fornecedor_id'      => 3, // Estofados Chapecó
+                'modelo'             => 'Sofá Veneza 4 Lugares Retrátil Molas Ensacadas',
+                'cor'                => 'Bege Claro',
+                'preco'              => 3499.00,
+                'quantidade_estoque' => 5,
+                'imagem'             => null,
             ],
             [
-                'modelo' => 'Sofá Chesterfield Clássico Veludo',
-                'cor' => 'Verde Musgo',
-                'preco' => 3850.50,
-                'fornecedor_id' => $fornecedores[2]->id ?? $fornecedores[0]->id,
-                'imagem' => 'imagem/sofa/sofa_3.jpg',
+                'categoria_id'       => 2, // Canto
+                'fornecedor_id'      => 2, // Plumatex
+                'modelo'             => 'Sofá de Canto Madri com Chaise',
+                'cor'                => 'Azul Marinho',
+                'preco'              => 3999.50,
+                'quantidade_estoque' => 4,
+                'imagem'             => null,
             ],
             [
-                'modelo' => 'Sofá Minimalista Nordic 2 Lugares',
-                'cor' => 'Azul Marinho',
-                'preco' => 2190.00,
-                'fornecedor_id' => $fornecedores[0]->id,
-                'imagem' => 'imagem/sofa/sofa_4.jpg',
+                'categoria_id'       => 3, // Sofá-Cama
+                'fornecedor_id'      => 4, // Mobiliart
+                'modelo'             => 'Sofá-Cama Versátil Click Clack',
+                'cor'                => 'Grafite',
+                'preco'              => 1899.00,
+                'quantidade_estoque' => 12,
+                'imagem'             => null,
             ],
             [
-                'modelo' => 'Sofá Cama Multifuncional Berlim',
-                'cor' => 'Marrom Café',
-                'preco' => 1950.00,
-                'fornecedor_id' => $fornecedores[3]->id ?? $fornecedores[0]->id,
-                'imagem' => 'imagem/sofa/sofa_5.jpg',
+                'categoria_id'       => 4, // Fixo Tradicional
+                'fornecedor_id'      => 5, // Sul Estofados
+                'modelo'             => 'Sofá Chesterfield Couro Ecológico 3 Lugares',
+                'cor'                => 'Marrom Conhaque',
+                'preco'              => 4590.00,
+                'quantidade_estoque' => 3,
+                'imagem'             => null,
             ],
             [
-                'modelo' => 'Sofá Modular Capri Chaise Longue',
-                'cor' => 'Terracota',
-                'preco' => 5200.00,
-                'fornecedor_id' => $fornecedores[1]->id ?? $fornecedores[0]->id,
-                'imagem' => 'imagem/sofa/sofa_1.jpg',
+                'categoria_id'       => 5, // Modular
+                'fornecedor_id'      => 1, // Herval
+                'modelo'             => 'Sofá Modular Aspen 5 Módulos',
+                'cor'                => 'Off White',
+                'preco'              => 5200.00,
+                'quantidade_estoque' => 6,
+                'imagem'             => null,
             ],
         ];
 
         foreach ($sofas as $sofa) {
-            Sofa::updateOrCreate(['modelo' => $sofa['modelo']], $sofa);
+            Sofa::create($sofa);
         }
     }
 }
