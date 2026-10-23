@@ -16,11 +16,12 @@ class Fornecedor extends Model
         'cnpj',
         'email_contato',
         'telefone',
-        'avaliacao',
+        'avaliacao'
     ];
 
+    // Exclusão funcionar no Controller
     public function sofas()
     {
-        return $this->hasMany(Sofa::class);
+        return $this->hasMany(Sofa::class); 
     }
 }

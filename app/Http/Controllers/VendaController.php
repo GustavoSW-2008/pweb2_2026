@@ -6,6 +6,7 @@ use App\Models\Venda;
 use App\Models\Cliente;
 use App\Models\Sofa;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class VendaController extends Controller
 {
@@ -129,4 +130,21 @@ class VendaController extends Controller
 
         return redirect()->route('vendas.index')->with('success', 'Venda removida com sucesso!');
     }
+
+    public function relatorio()
+    {
+
+        $vendas = Venda::with(['cliente', 'sofas'])->orderBy('created_at', 'desc')->get();
+
+        $data = [
+            'title' => 'Relatório de Vendas',
+            'date'  => date('d/m/Y H:i'),
+            'vendas' => $vendas,
+        ];
+
+        $pdf = Pdf::loadView('relatorios.vendas', $data);
+
+        return $pdf->download('relatorio_vendas.pdf');
+    }
+
 }

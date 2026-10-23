@@ -18,7 +18,7 @@
         <form action="{{ route('fornecedores.index') }}" method="GET" class="row g-2">
             <div class="col-md-9">
                 <input type="text" name="search" class="form-control"
-                    placeholder="Pesquisar por nome fantasia ou razão social..."
+                    placeholder="Pesquisar por nome da empresa..."
                     value="{{ $search ?? '' }}">
             </div>
             <div class="col-md-3 d-flex gap-2">
@@ -40,29 +40,31 @@
         <table class="table table-hover align-middle mb-0">
             <thead class="table-dark">
                 <tr>
-                    <th>Nome Fantasia</th>
-                    <th>Razão Social</th>
+                    <th>Empresa</th>
                     <th>CNPJ</th>
                     <th>E-mail de Contato</th>
                     <th>Telefone</th>
+                    <th>Avaliação</th>
                     <th class="text-center" style="width: 160px;">Ações</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($fornecedores as $fornecedor)
                 <tr>
-                    <td class="fw-semibold text-primary">{{ $fornecedor->nome_fantasia }}</td>
-                    <td>{{ $fornecedor->razao_social }}</td>
+                    <td class="fw-semibold text-primary">{{ $fornecedor->empresa }}</td>
                     <td><code>{{ $fornecedor->cnpj }}</code></td>
                     <td><small>{{ $fornecedor->email_contato }}</small></td>
                     <td>{{ $fornecedor->telefone }}</td>
+                    <td>
+                        <span class="badge bg-info text-dark">{{ $fornecedor->avaliacao }} / 10</span>
+                    </td>
                     <td class="text-center">
                         <a href="{{ route('fornecedores.edit', $fornecedor->id) }}" class="btn btn-sm btn-warning">
                             <i class="bi bi-pencil"></i> Editar
                         </a>
                         <form action="{{ route('fornecedores.destroy', $fornecedor->id) }}" method="POST"
                               class="d-inline-block"
-                              onsubmit="return confirm('Deseja realmente remover o fornecedor {{ $fornecedor->nome_fantasia }}?')">
+                              onsubmit="return confirm('Deseja realmente remover o fornecedor {{ $fornecedor->empresa }}?')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger">

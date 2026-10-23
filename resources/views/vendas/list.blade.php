@@ -8,9 +8,15 @@
         <h2 class="fw-bold mb-0"><i class="bi bi-cart-check me-2"></i>Histórico de Vendas</h2>
         <small class="text-muted">Registro de vendas e produtos vendidos</small>
     </div>
-    <a href="{{ route('vendas.create') }}" class="btn btn-success">
-        <i class="bi bi-plus-circle me-1"></i> Nova Venda
-    </a>
+    <div class="d-flex gap-2">
+        <a href="{{ route('relatorios.vendas') }}" class="btn btn-outline-danger">
+            <i class="bi bi-file-earmark-pdf me-1"></i> Relatório PDF
+        </a>
+        <a href="{{ route('vendas.create') }}" class="btn btn-success">
+            <i class="bi bi-plus-circle me-1"></i> Nova Venda
+        </a>
+    </div>
+
 </div>
 
 <div class="card mb-4 shadow-sm">

@@ -46,7 +46,7 @@
                                 <option value="">-- Selecione o Fornecedor --</option>
                                 @foreach($fornecedores as $forn)
                                     <option value="{{ $forn->id }}" {{ old('fornecedor_id', $sofa->fornecedor_id ?? '') == $forn->id ? 'selected' : '' }}>
-                                        {{ $forn->nome_fantasia }} ({{ $forn->razao_social }})
+                                        {{ $forn->empresa }}
                                     </option>
                                 @endforeach
                             </select>

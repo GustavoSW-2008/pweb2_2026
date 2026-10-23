@@ -9,9 +9,6 @@
         <small class="text-muted">Gerenciamento dos clientes da loja</small>
     </div>
     <div class="d-flex gap-2">
-        <a href="{{ route('clientes.report') }}" class="btn btn-outline-danger">
-            <i class="bi bi-file-earmark-pdf me-1"></i> Relatório PDF
-        </a>
         <a href="{{ route('clientes.create') }}" class="btn btn-success">
             <i class="bi bi-person-plus me-1"></i> Novo Cliente
         </a>

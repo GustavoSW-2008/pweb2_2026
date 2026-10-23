@@ -104,7 +104,7 @@ class SofaController extends Controller
             'sofas' => $sofas,
         ];
 
-        $pdf = Pdf::loadView('reports.sofas', $data);
+        $pdf = Pdf::loadView('relatorios.sofas', $data);
 
         return $pdf->download('relatorio_sofas.pdf');
     }

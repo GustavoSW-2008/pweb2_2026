@@ -13,33 +13,24 @@
                 </h4>
             </div>
             <div class="card-body p-4">
-                <form action="{{ isset($fornecedor) ? route('fornecedores.update', $fornecedor->id) : route('fornecedores.store') }}"
-                      method="POST">
+                <form action="{{ isset($fornecedor) ? route('fornecedores.update', $fornecedor->id) : route('fornecedores.store') }}" method="POST">
                     @csrf
                     @if(isset($fornecedor))
                         @method('PUT')
                     @endif
 
                     <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="nome_fantasia" class="form-label fw-semibold">Nome Fantasia <span class="text-danger">*</span></label>
-                            <input type="text" name="nome_fantasia" id="nome_fantasia" class="form-control @error('nome_fantasia') is-invalid @enderror"
-                                   value="{{ old('nome_fantasia', $fornecedor->nome_fantasia ?? '') }}" placeholder="Ex: Herval Estofados" required>
-                            @error('nome_fantasia')
+                        <!-- Substituição para "empresa" para bater com o Controller -->
+                        <div class="col-md-12">
+                            <label for="empresa" class="form-label fw-semibold">Empresa (Nome Fantasia / Razão Social) <span class="text-danger">*</span></label>
+                            <input type="text" name="empresa" id="empresa" class="form-control @error('empresa') is-invalid @enderror"
+                                   value="{{ old('empresa', $fornecedor->empresa ?? '') }}" placeholder="Ex: Herval Estofados" required>
+                            @error('empresa')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        <div class="col-md-6">
-                            <label for="razao_social" class="form-label fw-semibold">Razão Social <span class="text-danger">*</span></label>
-                            <input type="text" name="razao_social" id="razao_social" class="form-control @error('razao_social') is-invalid @enderror"
-                                   value="{{ old('razao_social', $fornecedor->razao_social ?? '') }}" placeholder="Ex: Herval Indústria e Comércio Ltda" required>
-                            @error('razao_social')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="cnpj" class="form-label fw-semibold">CNPJ <span class="text-danger">*</span></label>
                             <input type="text" name="cnpj" id="cnpj" class="form-control @error('cnpj') is-invalid @enderror"
                                    value="{{ old('cnpj', $fornecedor->cnpj ?? '') }}" placeholder="00.000.000/0001-00" required>
@@ -48,7 +39,7 @@
                             @enderror
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="telefone" class="form-label fw-semibold">Telefone <span class="text-danger">*</span></label>
                             <input type="text" name="telefone" id="telefone" class="form-control @error('telefone') is-invalid @enderror"
                                    value="{{ old('telefone', $fornecedor->telefone ?? '') }}" placeholder="(00) 0000-0000" required>
@@ -62,6 +53,16 @@
                             <input type="email" name="email_contato" id="email_contato" class="form-control @error('email_contato') is-invalid @enderror"
                                    value="{{ old('email_contato', $fornecedor->email_contato ?? '') }}" placeholder="comercial@empresa.com.br" required>
                             @error('email_contato')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Campo Novo: Avaliação (Obrigatório no Controller) -->
+                        <div class="col-md-2">
+                            <label for="avaliacao" class="form-label fw-semibold">Avaliação <span class="text-danger">*</span></label>
+                            <input type="number" name="avaliacao" id="avaliacao" class="form-control @error('avaliacao') is-invalid @enderror"
+                                   value="{{ old('avaliacao', $fornecedor->avaliacao ?? '') }}" placeholder="1 a 10" min="1" max="10" required>
+                            @error('avaliacao')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>

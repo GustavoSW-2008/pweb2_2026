@@ -123,13 +123,13 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a class="dropdown-item" href="{{ route('sofas.report') }}">
+                                <a class="dropdown-item" href="{{ route('relatorios.sofas') }}">
                                     <i class="bi bi-file-pdf text-danger me-2"></i> Relatório de Sofás
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{{ route('clientes.report') }}">
-                                    <i class="bi bi-file-pdf text-danger me-2"></i> Relatório de Clientes
+                                <a class="dropdown-item" href="{{ route('relatorios.vendas') }}">
+                                    <i class="bi bi-file-pdf text-danger me-2"></i> Relatório de Vendas
                                 </a>
                             </li>
                         </ul>
@@ -173,7 +173,7 @@
 
     <footer>
         <div class="container text-center">
-            <span>&copy; {{ date('Y') }} Pausa Sofás - IFSC Câmpus Chapecó</span>
+            <span>&copy; {{ date('Y') }} Pausa Sofás - Gustavo W. & Oswalt Z.</span>
         </div>
     </footer>
 

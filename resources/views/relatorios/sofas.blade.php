@@ -29,6 +29,9 @@
         .text-center {
             text-align: center;
         }
+        .text-right {
+            text-align: right;
+        }
     </style>
 </head>
 <body>
@@ -39,27 +42,29 @@
         <thead>
             <tr>
                 <th style="width: 40px;" class="text-center">#</th>
-                <th>Nome</th>
-                <th>CPF</th>
-                <th>Telefone</th>
-                <th>E-mail</th>
-                <th>Data de Nascimento</th>
+                <th>Modelo</th>
+                <th>Cor</th>
+                <th>Tecido</th>
+                <th>Fornecedor</th>
+                <th class="text-right">Preço</th>
+                <th class="text-center">Estoque</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($clientes as $index => $cliente)
+            @foreach($sofas as $index => $sofa)
             <tr>
                 <td class="text-center">{{ $index + 1 }}</td>
-                <td>{{ $cliente->nome }}</td>
-                <td>{{ $cliente->cpf }}</td>
-                <td>{{ $cliente->telefone }}</td>
-                <td>{{ $cliente->email }}</td>
-                <td>{{ date('d/m/Y', strtotime($cliente->data_nascimento)) }}</td>
+                <td>{{ $sofa->modelo }}</td>
+                <td>{{ $sofa->cor }}</td>
+                <td>{{ $sofa->fichaTecnica->tecido ?? '-' }}</td>
+                <td>{{ $sofa->fornecedor->empresa ?? '-' }}</td>
+                <td class="text-right">R$ {{ number_format($sofa->preco, 2, ',', '.') }}</td>
+                <td class="text-center">{{ $sofa->quantidade_estoque }} un</td>
             </tr>
             @endforeach
         </tbody>
     </table>
 
-    <p class="mt-3"><strong>Total de clientes cadastrados:</strong> {{ count($clientes) }}</p>
+    <p class="mt-3"><strong>Total de modelos listados:</strong> {{ count($sofas) }}</p>
 </body>
 </html>

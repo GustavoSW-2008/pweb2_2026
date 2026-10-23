@@ -9,7 +9,7 @@
         <small class="text-muted">Gerenciamento dos modelos de sofás em estoque</small>
     </div>
     <div class="d-flex gap-2">
-        <a href="{{ route('sofas.report') }}" class="btn btn-outline-danger">
+        <a href="{{ route('relatorios.sofas') }}" class="btn btn-outline-danger">
             <i class="bi bi-file-earmark-pdf me-1"></i> Relatório PDF
         </a>
         <a href="{{ route('sofas.create') }}" class="btn btn-success">
@@ -78,7 +78,7 @@
                             <span class="badge bg-light text-muted border">Sem ficha</span>
                         @endif
                     </td>
-                    <td><small class="text-muted">{{ $sofa->fornecedor->nome_fantasia ?? '-' }}</small></td>
+                    <td><small class="text-muted">{{ $sofa->fornecedor->empresa ?? '-' }}</small></td>
                     <td class="text-success fw-bold">R$ {{ number_format($sofa->preco, 2, ',', '.') }}</td>
                     <td class="text-center">
                         <span class="badge {{ $sofa->quantidade_estoque > 0 ? 'bg-success' : 'bg-danger' }}">

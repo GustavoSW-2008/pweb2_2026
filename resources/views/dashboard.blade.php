@@ -9,11 +9,11 @@
         <small class="text-muted">Visão geral da Loja de Sofás</small>
     </div>
     <div class="d-flex gap-2">
-        <a href="{{ route('sofas.report') }}" class="btn btn-outline-danger btn-sm">
+        <a href="{{ route('relatorios.sofas') }}" class="btn btn-outline-danger btn-sm">
             <i class="bi bi-file-earmark-pdf me-1"></i> PDF Sofás
         </a>
-        <a href="{{ route('clientes.report') }}" class="btn btn-outline-danger btn-sm">
-            <i class="bi bi-file-earmark-pdf me-1"></i> PDF Clientes
+        <a href="{{ route('relatorios.vendas') }}" class="btn btn-outline-danger btn-sm">
+            <i class="bi bi-file-earmark-pdf me-1"></i> PDF Vendas
         </a>
     </div>
 </div>
