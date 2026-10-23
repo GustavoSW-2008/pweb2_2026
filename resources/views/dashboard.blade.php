@@ -151,7 +151,7 @@
                         <tr>
                             <td class="fw-semibold">{{ $sofa->modelo }}</td>
                             <td><span class="badge bg-secondary">{{ $sofa->fichaTecnica->tecido ?? '-' }}</span></td>
-                            <td><small class="text-muted">{{ $sofa->fornecedor->nome_fantasia ?? '-' }}</small></td>
+                            <td><small class="text-muted">{{ $sofa->fornecedor->empresa ?? '-' }}</small></td>
                             <td class="text-success fw-bold">R$ {{ number_format($sofa->preco, 2, ',', '.') }}</td>
                             <td class="text-center"><span class="badge bg-primary">{{ $sofa->quantidade_estoque }}</span></td>
                         </tr>

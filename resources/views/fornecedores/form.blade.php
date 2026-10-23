@@ -22,7 +22,7 @@
                     <div class="row g-3">
                         <!-- Substituição para "empresa" para bater com o Controller -->
                         <div class="col-md-12">
-                            <label for="empresa" class="form-label fw-semibold">Empresa (Nome Fantasia / Razão Social) <span class="text-danger">*</span></label>
+                            <label for="empresa" class="form-label fw-semibold">Empresa <span class="text-danger">*</span></label>
                             <input type="text" name="empresa" id="empresa" class="form-control @error('empresa') is-invalid @enderror"
                                    value="{{ old('empresa', $fornecedor->empresa ?? '') }}" placeholder="Ex: Herval Estofados" required>
                             @error('empresa')
