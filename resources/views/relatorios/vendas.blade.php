@@ -70,7 +70,13 @@
                 <td>{{ date('d/m/Y', strtotime($venda->created_at)) }}</td>
                 <!-- Verifica se o cliente existe, se não, exibe 'Não informado' -->
                 <td>{{ $venda->cliente->nome ?? 'Não informado' }}</td>
-                <td>{{ $venda->sofa->modelo ?? 'Não informado' }}</td>
+                <td>
+                    @if($venda->sofas->count() > 0)
+                        {{ $venda->sofas->pluck('modelo')->implode(', ') }}
+                    @else
+                        Não informado
+                    @endif
+                </td>
                 <!-- Formata o valor para o padrão Real Brasileiro -->
                 <td class="text-right">R$ {{ number_format($venda->valor_total, 2, ',', '.') }}</td>
             </tr>

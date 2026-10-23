@@ -133,7 +133,6 @@ class VendaController extends Controller
 
     public function relatorio()
     {
-
         $vendas = Venda::with(['cliente', 'sofas'])->orderBy('created_at', 'desc')->get();
 
         $data = [

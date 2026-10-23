@@ -59,14 +59,10 @@
                 @forelse($sofas as $sofa)
                 <tr>
                     <td>
-                        @if($sofa->imagem)
-                            <img src="{{ asset('storage/' . $sofa->imagem) }}"
-                                 alt="{{ $sofa->modelo }}"
-                                 class="product-thumbnail">
+                        @if(Str::startsWith($sofa->imagem, 'sofas/'))
+                            <img src="{{ asset('storage/' . $sofa->imagem) }}" alt="{{ $sofa->modelo }}" width="80">
                         @else
-                            <div class="product-thumbnail d-flex align-items-center justify-content-center bg-light text-secondary">
-                                <i class="bi bi-box-seam fs-4"></i>
-                            </div>
+                            <img src="{{ asset('img/sofas/' . $sofa->imagem) }}" alt="{{ $sofa->modelo }}" width="80">
                         @endif
                     </td>
                     <td class="fw-semibold">{{ $sofa->modelo }}</td>
